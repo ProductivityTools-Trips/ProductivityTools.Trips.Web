@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { getDate } from './services/apiService'
+import service from './services/apiService'
 
 function App() {
 
   const [date, setDate] = useState(null);
 
   useEffect(() => {
-    let date = getDate();
-    setDate(date);
+    const fetchData = async () => {
+
+
+      const dt = await service.getDate();
+      setDate(dt);
+    }
+    fetchData();
   }, [])
 
 
