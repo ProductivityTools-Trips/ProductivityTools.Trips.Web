@@ -1,7 +1,14 @@
+
+import { useParams  } from "react-router-dom";
+
+
 function TripEdit(){
+    let params=useParams();
+
     return(
         <div>
-            TripEdit
+            <p>TripEdit</p>
+            <p>{params.id}</p>
         </div>
     )
 }

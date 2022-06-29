@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import service from '../../services/apiService'
+import {Link} from 'react-router-dom'
 
 function TripList() {
 
@@ -18,13 +19,15 @@ function TripList() {
         <div>
             <p>Trips:</p>
             <table>
-                {trips && trips.map(x => {
-                    return (
-                        <tr>
-                            <td>{x.name}</td>
-                        </tr>)
-                })}
-
+                <tbody>
+                    {trips && trips.map(x => {
+                        return (
+                            <tr key={x.bagID}>
+                                <td><Link to={"tripedit/"+x.bagID}>{x.bagID}</Link></td>
+                                <td>{x.name}</td>
+                            </tr>)
+                    })}
+                </tbody>
             </table>
         </div>
     )
