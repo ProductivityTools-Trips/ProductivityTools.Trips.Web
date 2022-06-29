@@ -1,5 +1,5 @@
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import service from '../../services/apiService'
 
@@ -19,12 +19,28 @@ function TripEdit() {
     }, [])
 
 
+    const handleChange = (e) => {
+        console.log(e);
+        const { name, value } = e.target;
+        console.log(name);
+        console.log(value);
+        setTrip(prevState => ({
+            ...prevState, [name]: value
+        }))
+    }
+
+    const save = () => {
+        service.saveTrip(trip);
+    }
+
     return (
         <div>
             <p>TripEdit</p>
             <p>{params.id}</p>
-            <p>{trip && trip.name}</p>
+            <p><input type='edit' name='name' value={trip && trip.name || ""} onChange={handleChange}></input> </p>
+            <button onClick={save}>Save</button>
         </div>
+
     )
 }
 
