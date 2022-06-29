@@ -1,30 +1,19 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css';
-import service from './services/apiService'
-import TripList from './Components/TripList'
+import Home from './Components/Home'
+import TripEdit from './Components/TripEdit';
+
 
 function App() {
-
-  const [date, setDate] = useState(null);
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const dt = await service.getDate();
-      setDate(dt);
-    }
-    fetchData();
-  }, [])
-
-
-
   return (
     <div className="App">
-      <p>{date}</p>
-      Hello
-      <div>
-        <TripList />
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home />}></Route>
+          <Route path='edit' element={<TripEdit />}></Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
