@@ -7,8 +7,14 @@ async function getDate(){
     return response.data;
 }
 
+async function getTrips(){
+    const response=await axios.get(`${config.PATH_BASE}/Trip/List`)
+    return response.data;
+}
+
 const service={
-    getDate
+    getDate,
+    getTrips
 }
 
 export default service;
