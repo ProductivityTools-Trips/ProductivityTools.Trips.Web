@@ -12,9 +12,15 @@ async function getTrips(){
     return response.data;
 }
 
+async function getTrip(id){
+    const response=await axios.get(`${config.PATH_BASE}/Trip/Get?id=${id}`)
+    return response.data;
+}
+
 const service={
     getDate,
-    getTrips
+    getTrips,
+    getTrip
 }
 
 export default service;
