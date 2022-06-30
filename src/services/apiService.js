@@ -21,11 +21,17 @@ async function saveTrip(trip) {
     const response = await axios.post(`${config.PATH_BASE}/Trip/Save`, trip)
 }
 
+async function getExpenses(id){
+    const response=await axios.get(`${config.PATH_BASE}/Expense/Get?id=${id}`);
+    return response.data
+}
+
 const service = {
     getDate,
     getTrips,
     getTrip,
-    saveTrip
+    saveTrip,
+    getExpenses
 }
 
 export default service;

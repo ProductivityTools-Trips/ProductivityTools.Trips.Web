@@ -17,6 +17,7 @@ function TripList() {
 
     return (
         <div>
+        
             <p>Trips:</p>
             <table>
                 <tbody>
