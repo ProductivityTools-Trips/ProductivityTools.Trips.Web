@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css';
 import Home from './Components/Home'
+import TripDetail from './Components/TripDetail';
 import TripEdit from './Components/TripEdit';
 
 
@@ -11,8 +12,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home />}></Route>
-          <Route path='tripedit/:id' element={<TripEdit />}>
-          </Route>
+          <Route path='tripedit/:id' element={<TripEdit />}></Route>
+          <Route path='tripdetail/:id' element={<TripDetail />}></Route>
+
         </Routes>
       </BrowserRouter>
     </div>
