@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import service from '../../services/apiService'
 import { Link } from 'react-router-dom'
-import ExpenseList from "../ExpenseList";
 
 
 
@@ -42,7 +41,6 @@ function TripEdit() {
             <p>TripEdit</p>
             <p>{params.id}</p>
             <p><input type='edit' name='name' value={trip && trip.name || ""} onChange={handleChange}></input> </p>
-            <ExpenseList></ExpenseList>
             <button onClick={save}>Save</button>
         </div>
 

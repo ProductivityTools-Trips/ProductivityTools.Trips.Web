@@ -1,4 +1,5 @@
 import {Link, useParams } from "react-router-dom";
+import ExpenseList from "../ExpenseList";
 
 
 function TripDetail() {
@@ -7,9 +8,9 @@ function TripDetail() {
 
     return (
         <div>
-            Edit:
-            <Link to={"/tripedit/" + params.id}>{params.id}</Link>
+            <Link to={"/tripedit/" + params.id}>Edit this trip</Link>
             <p>TripDetail</p>
+            <ExpenseList></ExpenseList>
         </div>)
 }
 
