@@ -22,8 +22,17 @@ async function saveTrip(trip) {
 }
 
 async function getExpenses(id){
+    const response=await axios.get(`${config.PATH_BASE}/Expense/GetList?tripId=${id}`);
+    return response.data
+}
+
+async function getExpense(id){
     const response=await axios.get(`${config.PATH_BASE}/Expense/Get?id=${id}`);
     return response.data
+}
+
+async function saveExpense(trip) {
+    const response = await axios.post(`${config.PATH_BASE}/Expense/Save`, trip)
 }
 
 const service = {
@@ -31,7 +40,9 @@ const service = {
     getTrips,
     getTrip,
     saveTrip,
-    getExpenses
+    getExpenses,
+    getExpense,
+    saveExpense
 }
 
 export default service;
