@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import service from '../../services/apiService'
-import { useParams } from "react-router-dom";
+import { useParams,Link } from "react-router-dom";
 
 function ExpenseList() {
 
@@ -20,7 +20,25 @@ function ExpenseList() {
     return (
         <div>
             <div>ExpenseList</div>
-            <p>{expenses && expenses.map(x => x.name)}</p>
+            
+            <table>
+                <tbody>
+                    {expenses && expenses.map(x => {
+                        return (
+                            <tr>
+                                <td>
+                                    {x.name}
+                                </td>
+                                <td>
+                                <Link to={"/expenseedit/" + x.expenseID}>Edit expense</Link>
+
+                                </td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+            <p></p>
         </div>
 
     )
