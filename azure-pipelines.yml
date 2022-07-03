@@ -17,10 +17,10 @@ steps:
 
 - script: |
     yarn install
-    yarn build
-  displayName: 'yarn instal and build'
+    yarn run build
+  displayName: 'yarn install and build'
 
- - task: CopyFiles@2
+- task: CopyFiles@2
   displayName: 'Copy files'
   inputs:
     sourceFolder: 'build' 
