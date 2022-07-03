@@ -5,6 +5,9 @@ import Home from './Components/Home'
 import TripDetail from './Components/TripDetail';
 import TripEdit from './Components/TripEdit';
 import ExpenseEdit from './Components/ExpenseEdit';
+import ExpenseAdd from './Components/ExpenseAdd';
+
+
 
 function App() {
   return (
@@ -15,6 +18,7 @@ function App() {
           <Route path='tripedit/:id' element={<TripEdit />}></Route>
           <Route path='tripdetail/:id' element={<TripDetail />}></Route>
           <Route path='ExpenseEdit/:id' element={<ExpenseEdit/>}></Route>
+          <Route path='ExpenseAdd/' element={<ExpenseAdd/>}></Route>
 
         </Routes>
       </BrowserRouter>
