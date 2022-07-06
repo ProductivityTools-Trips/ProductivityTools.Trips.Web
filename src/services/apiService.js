@@ -35,6 +35,11 @@ async function saveExpense(trip) {
     const response = await axios.post(`${config.PATH_BASE}/Expense/Save`, trip)
 }
 
+async function getCurrencyDictionary(){
+    const response=await axios.get(`${config.PATH_BASE}/Dictionary/Currencies`)
+    return response.data;
+}
+
 const service = {
     getDate,
     getTrips,
@@ -42,7 +47,8 @@ const service = {
     saveTrip,
     getExpenses,
     getExpense,
-    saveExpense
+    saveExpense,
+    getCurrencyDictionary
 }
 
 export default service;
