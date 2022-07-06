@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState, useCallback } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import service from '../../services/apiService';
 
 function ExpenseEdit() {
@@ -7,6 +7,7 @@ function ExpenseEdit() {
 
     let params = useParams();
     const [expense, setExpense] = useState(null)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,12 +30,21 @@ function ExpenseEdit() {
         service.saveExpense(expense);
     }
 
+
+    const tripDetails = () => {
+        navigate('/tripdetail/' + expense.tripId, { replace: true })
+    };
+
+
     return (
-    <div>
-        <p>Expense EditA</p>
-        <p>{expense && expense.name}</p>
-        <input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input> 
-        <button onClick={save}>Save</button>
-    </div>)
+        <div>
+            <p>Expense EditA</p>
+            <p>TripDetail</p>
+            <p>{expense && expense.tripId}</p>
+            <button onClick={tripDetails}>Back</button>
+            <p>{expense && expense.name}</p>
+            <input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input>
+            <button onClick={save}>Save</button>
+        </div>)
 }
 export default ExpenseEdit;

@@ -30,7 +30,7 @@ function ExpenseList() {
                                     {x.name}
                                 </td>
                                 <td>
-                                <Link to={"/expenseedit/" + x.expenseID}>Edit expense</Link>
+                                <Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link>
 
                                 </td>
                             </tr>

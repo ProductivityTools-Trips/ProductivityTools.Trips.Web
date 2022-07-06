@@ -23,8 +23,8 @@ function TripList() {
                 <tbody>
                     {trips && trips.map(x => {
                         return (
-                            <tr key={x.bagID}>
-                                <td><Link to={"tripdetail/"+x.bagID}>{x.bagID}</Link></td>
+                            <tr key={x.tripId}>
+                                <td><Link to={"tripdetail/"+x.tripId}>{x.tripId}</Link></td>
                                 <td>{x.name}</td>
                             </tr>)
                     })}
