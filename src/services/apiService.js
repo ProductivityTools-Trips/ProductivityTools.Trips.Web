@@ -40,6 +40,11 @@ async function getCurrencyDictionary(){
     return response.data;
 }
 
+async function getCategoryDictionary(){
+    const response=await axios.get(`${config.PATH_BASE}/Dictionary/Categories`)
+    return response.data;
+}
+
 const service = {
     getDate,
     getTrips,
@@ -48,7 +53,8 @@ const service = {
     getExpenses,
     getExpense,
     saveExpense,
-    getCurrencyDictionary
+    getCurrencyDictionary,
+    getCategoryDictionary
 }
 
 export default service;

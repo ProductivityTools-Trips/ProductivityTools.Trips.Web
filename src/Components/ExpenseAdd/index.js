@@ -3,8 +3,9 @@ import service from '../../services/apiService';
 
 function ExpenseAdd() {
 
-    const [expense, setExpense] = useState({ currency: 'PLN' })
+    const [expense, setExpense] = useState({ currency: 'PLN', category: 'Food' })
     const [currencies, setCurrencies] = useState([]);
+    const [categories, setCategories] = useState([])
 
     const handleChange = (e) => {
         console.log(e);
@@ -17,12 +18,20 @@ function ExpenseAdd() {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchCurrencies = async () => {
             const r = await service.getCurrencyDictionary();
             setCurrencies(r);
             console.log(r);
         };
-        fetchData();
+
+        const fetchCategories = async () => {
+            const r = await service.getCategoryDictionary();
+            setCategories(r);
+            console.log(r);
+        }
+
+        fetchCurrencies();
+        fetchCategories();
     }, [])
 
     const changeCurrency = (e) => {
@@ -30,6 +39,13 @@ function ExpenseAdd() {
         console.log(e);
         setExpense(prevState => ({
             ...prevState, currency: e
+        }))
+    }
+
+    const changeCategory = (e) => {
+        console.log('change category')
+        setExpense(prevState => ({
+            ...prevState, category: e
         }))
     }
 
@@ -45,16 +61,24 @@ function ExpenseAdd() {
             <p>Discount: :<input type='edit' name='discount' value={expense && expense.discount || ""} onChange={handleChange}></input></p>
             <p>{currencies && currencies.length > 0 && currencies[0].name}</p>
             <p>Currencies:
-                <div>
-                    {currencies && currencies.map(x => {
-                        return (
-                            <span>
-                                <input type="radio" value={x.name} onClick={() => changeCurrency(x.name)} checked={expense.currency == x.name} name="currency"></input>{x.name}
-                            </span>
-                        )
-                    })}
-                </div>
 
+                {currencies && currencies.map(x => {
+                    return (
+                        <span>
+                            <input type="radio" value={x.name} onClick={() => changeCurrency(x.name)} checked={expense.currency == x.name} name="currency"></input>{x.name}
+                        </span>
+                    )
+                })}
+            </p>
+            <p>
+                Category:
+                {categories && categories.map(x => {
+                    return (
+                        <span>
+                            <input type="radio" value={x.name} onClick={() => changeCategory(x.name)} checked={expense.category == x.name} name='category'></input>{x.name}
+                        </span>
+                    )
+                })}
             </p>
         </div>
     )
