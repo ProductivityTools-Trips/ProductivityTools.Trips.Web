@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import service from '../../services/apiService';
+import {useSearchParams} from 'react-router-dom'
 
 function ExpenseAdd() {
+
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tripId=searchParams.get("tripId")
+
+
 
     const [expense, setExpense] = useState({ currency: 'PLN', category: 'Food' })
     const [currencies, setCurrencies] = useState([]);
@@ -52,6 +59,7 @@ function ExpenseAdd() {
     return (
         <div>
             <p>Add</p>
+            <p>Adding to trip: {tripId}</p>
             <p><span>Expense Name: </span><span>{expense && expense.name}</span></p>
             <p><span>Expense value: </span><span>{expense && expense.value}</span></p>
             <p><span>Discount value: </span><span>{expense && expense.discount}</span></p>

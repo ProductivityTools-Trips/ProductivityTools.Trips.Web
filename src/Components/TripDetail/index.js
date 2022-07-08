@@ -10,7 +10,7 @@ function TripDetail() {
         <div>
             <Link to={"/"}>Trip List</Link>
             <Link to={"/tripedit/" + params.id}>Edit this trip</Link>
-            <Link to={"/expenseadd/"}>AddExpense</Link>
+            <Link to={"/expenseadd/?tripId=" + params.id}>AddExpense</Link>
             <p>TripDetail</p>
             <ExpenseList></ExpenseList>
         </div>)
