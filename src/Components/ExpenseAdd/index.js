@@ -64,8 +64,8 @@ function ExpenseAdd() {
 
                 {currencies && currencies.map(x => {
                     return (
-                        <span>
-                            <input type="radio" value={x.name} onClick={() => changeCurrency(x.name)} checked={expense.currency == x.name} name="currency"></input>{x.name}
+                        <span  key={x.currencyId}>
+                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.name)} checked={expense.currency == x.name} name="currency"></input>{x.name}
                         </span>
                     )
                 })}
@@ -74,8 +74,8 @@ function ExpenseAdd() {
                 Category:
                 {categories && categories.map(x => {
                     return (
-                        <span>
-                            <input type="radio" value={x.name} onClick={() => changeCategory(x.name)} checked={expense.category == x.name} name='category'></input>{x.name}
+                        <span  key={x.categoryId}>
+                            <input type="radio" value={x.name} onChange={() => changeCategory(x.name)} checked={expense.category == x.name} name='category'></input>{x.name}
                         </span>
                     )
                 })}
