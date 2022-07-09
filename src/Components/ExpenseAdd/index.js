@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import service from '../../services/apiService';
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 
 function ExpenseAdd() {
 
 
     const [searchParams, setSearchParams] = useSearchParams();
     const tripId = parseInt(searchParams.get("tripId"));
+    const navigate = useNavigate();
+
 
 
 
@@ -56,8 +58,9 @@ function ExpenseAdd() {
         }))
     }
 
-    const addExpense = () => {
-        service.addExpense(expense);
+    const addExpense = async () => {
+        await service.addExpense(expense);
+        navigate('/tripdetail/' + expense.tripId, { replace: true })
     }
 
     return (
