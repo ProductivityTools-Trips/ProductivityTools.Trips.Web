@@ -31,9 +31,15 @@ async function getExpense(id){
     return response.data
 }
 
-async function saveExpense(trip) {
-    const response = await axios.post(`${config.PATH_BASE}/Expense/Save`, trip)
+
+async function saveExpense(expense) {
+    const response = await axios.post(`${config.PATH_BASE}/Expense/Save`, expense)
 }
+
+async function addExpense(expense){
+    const response=await axios.post(`${config.PATH_BASE}/Expense/Add`,expense)    
+}
+
 
 async function getCurrencyDictionary(){
     const response=await axios.get(`${config.PATH_BASE}/Dictionary/Currencies`)
@@ -53,6 +59,7 @@ const service = {
     getExpenses,
     getExpense,
     saveExpense,
+    addExpense,
     getCurrencyDictionary,
     getCategoryDictionary
 }

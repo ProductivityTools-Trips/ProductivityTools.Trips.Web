@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import service from '../../services/apiService';
-import {useSearchParams} from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
 function ExpenseAdd() {
 
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const tripId=searchParams.get("tripId")
+    const tripId = searchParams.get("tripId")
 
 
 
@@ -56,6 +56,10 @@ function ExpenseAdd() {
         }))
     }
 
+    const addExpense=()=>{
+        service.addExpense(expense);
+    }
+
     return (
         <div>
             <p>Add</p>
@@ -72,7 +76,7 @@ function ExpenseAdd() {
 
                 {currencies && currencies.map(x => {
                     return (
-                        <span  key={x.currencyId}>
+                        <span key={x.currencyId}>
                             <input type="radio" value={x.name} onChange={() => changeCurrency(x.name)} checked={expense.currency == x.name} name="currency"></input>{x.name}
                         </span>
                     )
@@ -82,11 +86,14 @@ function ExpenseAdd() {
                 Category:
                 {categories && categories.map(x => {
                     return (
-                        <span  key={x.categoryId}>
+                        <span key={x.categoryId}>
                             <input type="radio" value={x.name} onChange={() => changeCategory(x.name)} checked={expense.category == x.name} name='category'></input>{x.name}
                         </span>
                     )
                 })}
+            </p>
+            <p>
+                <input type="button" value="Add" onClick={addExpense}></input>
             </p>
         </div>
     )
