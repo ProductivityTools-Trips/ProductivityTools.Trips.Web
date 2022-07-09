@@ -25,14 +25,13 @@ function ExpenseList() {
                 <tbody>
                     {expenses && expenses.map(x => {
                         return (
-                            <tr>
-                                <td>
-                                    {x.name}
-                                </td>
-                                <td>
-                                <Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link>
-
-                                </td>
+                            <tr key={x.expenseId}>
+                                <td>{x.name}</td>
+                                <td>{x.Date}</td>
+                                <td>{x.value}</td>
+                                <td>{x.discount}</td>
+                                <td>{x.valueAfterDiscount}</td>
+                                <td><Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link></td>
                             </tr>
                         )
                     })}
