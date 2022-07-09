@@ -6,11 +6,11 @@ function ExpenseAdd() {
 
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const tripId = searchParams.get("tripId")
+    const tripId = parseInt(searchParams.get("tripId"));
 
 
 
-    const [expense, setExpense] = useState({ currency: 'PLN', category: 'Food' })
+    const [expense, setExpense] = useState({ currency: 'PLN', category: 'Food', tripId: tripId })
     const [currencies, setCurrencies] = useState([]);
     const [categories, setCategories] = useState([])
 
@@ -56,7 +56,7 @@ function ExpenseAdd() {
         }))
     }
 
-    const addExpense=()=>{
+    const addExpense = () => {
         service.addExpense(expense);
     }
 
