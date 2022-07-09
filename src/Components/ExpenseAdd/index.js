@@ -12,7 +12,7 @@ function ExpenseAdd() {
 
 
 
-    const [expense, setExpense] = useState({ currency: 'PLN', category: 'Food', tripId: tripId })
+    const [expense, setExpense] = useState({ currencyId: 1, categoryId: 1, tripId: tripId, date: '2022-01-01' })
     const [currencies, setCurrencies] = useState([]);
     const [categories, setCategories] = useState([])
 
@@ -30,12 +30,21 @@ function ExpenseAdd() {
         const fetchCurrencies = async () => {
             const r = await service.getCurrencyDictionary();
             setCurrencies(r);
+            let pln = r.find(x => x.name == 'PLN');
+            setExpense(prevState => ({
+                ...prevState, currencyId: pln.currencyId
+            }))
             console.log(r);
         };
 
         const fetchCategories = async () => {
             const r = await service.getCategoryDictionary();
             setCategories(r);
+            let food = r.find(x => x.name = 'Food');
+            console.log(food);
+            setExpense(prevState => ({
+                ...prevState, categorIdy: food.categoryId
+            }))
             console.log(r);
         }
 
@@ -47,14 +56,14 @@ function ExpenseAdd() {
         console.log('change currency');
         console.log(e);
         setExpense(prevState => ({
-            ...prevState, currency: e
+            ...prevState, currencyId: e
         }))
     }
 
     const changeCategory = (e) => {
         console.log('change category')
         setExpense(prevState => ({
-            ...prevState, category: e
+            ...prevState, categoryId: e
         }))
     }
 
@@ -80,7 +89,7 @@ function ExpenseAdd() {
                 {currencies && currencies.map(x => {
                     return (
                         <span key={x.currencyId}>
-                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.name)} checked={expense.currency == x.name} name="currency"></input>{x.name}
+                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.currencyId)} checked={expense.currencyId == x.currencyId} name="currency"></input>{x.name}
                         </span>
                     )
                 })}
@@ -90,7 +99,7 @@ function ExpenseAdd() {
                 {categories && categories.map(x => {
                     return (
                         <span key={x.categoryId}>
-                            <input type="radio" value={x.name} onChange={() => changeCategory(x.name)} checked={expense.category == x.name} name='category'></input>{x.name}
+                            <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense.categoryId == x.categoryId} name='category'></input>{x.name}
                         </span>
                     )
                 })}
