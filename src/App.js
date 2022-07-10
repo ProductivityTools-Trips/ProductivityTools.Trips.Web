@@ -6,23 +6,26 @@ import TripDetail from './Components/TripDetail';
 import TripEdit from './Components/TripEdit';
 import ExpenseEdit from './Components/ExpenseEdit';
 import ExpenseAdd from './Components/ExpenseAdd';
+import { CacheContext, CacheProvider } from './session/CacheContext';
 
 
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />}></Route>
-          <Route path='tripedit/:id' element={<TripEdit />}></Route>
-          <Route path='tripdetail/:id' element={<TripDetail />}></Route>
-          <Route path='ExpenseEdit/:id' element={<ExpenseEdit/>}></Route>
-          <Route path='ExpenseAdd/' element={<ExpenseAdd/>}></Route>
+    <CacheProvider>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Home />}></Route>
+            <Route path='tripedit/:id' element={<TripEdit />}></Route>
+            <Route path='tripdetail/:id' element={<TripDetail />}></Route>
+            <Route path='ExpenseEdit/:id' element={<ExpenseEdit />}></Route>
+            <Route path='ExpenseAdd/' element={<ExpenseAdd />}></Route>
 
-        </Routes>
-      </BrowserRouter>
-    </div>
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </CacheProvider>
   );
 }
 
