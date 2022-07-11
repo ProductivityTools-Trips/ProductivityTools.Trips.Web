@@ -10,7 +10,7 @@ export const useCache = () => {
 
 export function CacheProvider({ children }) {
 
-    const [dictionary, setDictionary] = useState(null);
+    const [dictionary, setDictionary] = useState({'pawel':'wujczyk'});
     const [currencies, setCurrencies] = useState([]);
     const [categories, setCategories] = useState([])
 
@@ -21,7 +21,10 @@ export function CacheProvider({ children }) {
             setDictionary(prevState => ({
                 ...prevState, 'currencies': r
             }))
+            console.log("currencies")
             console.log(r);
+            console.log("dictionary");
+            console.log(dictionary);
         };
 
         const fetchCategories = async () => {
@@ -30,6 +33,10 @@ export function CacheProvider({ children }) {
             setDictionary(prevState => ({
                 ...prevState, 'categories': r
             }))
+            console.log("categories")
+            console.log(r);
+            console.log("dictionary");
+            console.log(dictionary);
         }
         console.log("CACHE PROVIDER INVOKED")
         fetchCurrencies();

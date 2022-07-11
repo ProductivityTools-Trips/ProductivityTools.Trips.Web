@@ -12,8 +12,6 @@ function ExpenseAdd() {
     let cache = useContext(CacheContext);
 
     const [expense, setExpense] = useState({ currencyId: 1, categoryId: 1, tripId: tripId, date: '2022-01-01' })
-    // const [currencies, setCurrencies] = useState([]);
-    const [categories, setCategories] = useState([])
 
     const handleChange = (e) => {
         console.log(e);
@@ -27,8 +25,7 @@ function ExpenseAdd() {
 
     useEffect(() => {
 
-        const loadCurrencies = () => {
-            //       setCurrencies(cache.currencies);
+        const markPln = () => {
             console.log("cachecurrencies");
             console.log(cache.currencies);
             let pln = cache.currencies.find(x => x.name == 'PLN');
@@ -36,32 +33,23 @@ function ExpenseAdd() {
                 ...prevState, currencyId: pln.currencyId
             }))
         }
-        // const fetchCurrencies = async () => {
-        //     const r = await service.getCurrencyDictionary();
-        //     setCurrencies(r);
-        //     let pln = r.find(x => x.name == 'PLN');
-        //     setExpense(prevState => ({
-        //         ...prevState, currencyId: pln.currencyId
-        //     }))
-        //     console.log(r);
-        // };
 
-        const fetchCategories = async () => {
-            const r = await service.getCategoryDictionary();
-            setCategories(r);
-            let food = r.find(x => x.name = 'Food');
-            console.log(food);
+        const markFood=()=>{
+            let food = cache.categories.find(x => x.name == 'Food');
             setExpense(prevState => ({
-                ...prevState, categorIdy: food.categoryId
+                ...prevState, categoryId: food.categoryId
             }))
-            console.log(r);
         }
-        console.log("useeffect")
-        if (cache) {
-            loadCurrencies();
+        
+        if (cache && cache.currencies) {
+            console.log(cache)
+            markPln();
         }
-        //fetchCurrencies();
-        fetchCategories();
+
+        if (cache && cache.categories) {
+            console.log(cache)
+            markFood();
+        }
     }, [cache])
 
     const changeCurrency = (e) => {
@@ -108,7 +96,7 @@ function ExpenseAdd() {
             </p> }
             <p>
                 Category:
-                {categories && categories.map(x => {
+                { cache && cache.categories && cache.categories.map(x => {
                     return (
                         <span key={x.categoryId}>
                             <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense.categoryId == x.categoryId} name='category'></input>{x.name}
