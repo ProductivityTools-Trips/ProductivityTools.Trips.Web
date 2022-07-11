@@ -31,7 +31,7 @@ export function CacheProvider({ children }) {
                 ...prevState, 'categories': r
             }))
         }
-
+        console.log("CACHE PROVIDER INVOKED")
         fetchCurrencies();
         fetchCategories();
     }, [])

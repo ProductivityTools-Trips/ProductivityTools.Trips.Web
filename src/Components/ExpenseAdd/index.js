@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { CacheContext } from '../../session/CacheContext';
 import service from '../../services/apiService';
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
@@ -8,12 +9,10 @@ function ExpenseAdd() {
     const [searchParams, setSearchParams] = useSearchParams();
     const tripId = parseInt(searchParams.get("tripId"));
     const navigate = useNavigate();
-
-
-
+    let cache = useContext(CacheContext);
 
     const [expense, setExpense] = useState({ currencyId: 1, categoryId: 1, tripId: tripId, date: '2022-01-01' })
-    const [currencies, setCurrencies] = useState([]);
+    // const [currencies, setCurrencies] = useState([]);
     const [categories, setCategories] = useState([])
 
     const handleChange = (e) => {
@@ -27,15 +26,25 @@ function ExpenseAdd() {
     }
 
     useEffect(() => {
-        const fetchCurrencies = async () => {
-            const r = await service.getCurrencyDictionary();
-            setCurrencies(r);
-            let pln = r.find(x => x.name == 'PLN');
+
+        const loadCurrencies = () => {
+            //       setCurrencies(cache.currencies);
+            console.log("cachecurrencies");
+            console.log(cache.currencies);
+            let pln = cache.currencies.find(x => x.name == 'PLN');
             setExpense(prevState => ({
                 ...prevState, currencyId: pln.currencyId
             }))
-            console.log(r);
-        };
+        }
+        // const fetchCurrencies = async () => {
+        //     const r = await service.getCurrencyDictionary();
+        //     setCurrencies(r);
+        //     let pln = r.find(x => x.name == 'PLN');
+        //     setExpense(prevState => ({
+        //         ...prevState, currencyId: pln.currencyId
+        //     }))
+        //     console.log(r);
+        // };
 
         const fetchCategories = async () => {
             const r = await service.getCategoryDictionary();
@@ -47,10 +56,13 @@ function ExpenseAdd() {
             }))
             console.log(r);
         }
-
-        fetchCurrencies();
+        console.log("useeffect")
+        if (cache) {
+            loadCurrencies();
+        }
+        //fetchCurrencies();
         fetchCategories();
-    }, [])
+    }, [cache])
 
     const changeCurrency = (e) => {
         console.log('change currency');
@@ -83,17 +95,17 @@ function ExpenseAdd() {
             <p>Name:<input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input></p>
             <p>Value:<input type='edit' name='value' value={expense && expense.value || ""} onChange={handleChange}></input></p>
             <p>Discount: :<input type='edit' name='discount' value={expense && expense.discount || ""} onChange={handleChange}></input></p>
-            <p>{currencies && currencies.length > 0 && currencies[0].name}</p>
-            <p>Currencies:
+            <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
+            { <p>Currencies:
 
-                {currencies && currencies.map(x => {
+                {cache && cache.currencies && cache.currencies.map(x => {
                     return (
                         <span key={x.currencyId}>
                             <input type="radio" value={x.name} onChange={() => changeCurrency(x.currencyId)} checked={expense.currencyId == x.currencyId} name="currency"></input>{x.name}
                         </span>
                     )
                 })}
-            </p>
+            </p> }
             <p>
                 Category:
                 {categories && categories.map(x => {
