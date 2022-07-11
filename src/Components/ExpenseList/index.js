@@ -7,7 +7,7 @@ function ExpenseList() {
 
     let params = useParams();
     const [expenses, setExpenses] = useState(null)
-    let cx=React.useContext(CacheContext);
+    let cx = React.useContext(CacheContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,18 +23,28 @@ function ExpenseList() {
 
     return (
         <div>
-            <div>ExpenseList</div>
+            <div>ExpenseList1</div>
             <div>
-                {cx.currencies[0].name}
+                {cx && cx.currencies && cx.currencies[0].name}
             </div>
             <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Value</th>
+                        <th>Discount</th>
+                        <th>Value after Discount</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {expenses && expenses.map(x => {
                         return (
                             <tr key={x.expenseId}>
                                 <td>{x.name}</td>
-                                <td>{x.Date}</td>
+                                <td>{x.date}</td>
                                 <td>{x.value}</td>
+
                                 <td>{x.discount}</td>
                                 <td>{x.valueAfterDiscount}</td>
                                 <td><Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link></td>
