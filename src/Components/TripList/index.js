@@ -10,7 +10,7 @@ function TripList() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const r = await service.getTrips();
+            const r = await service.getTripsFullView();
             setTrips(r);
         }
         fetchData();

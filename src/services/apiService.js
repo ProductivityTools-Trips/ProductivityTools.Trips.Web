@@ -12,6 +12,12 @@ async function getTrips() {
     return response.data;
 }
 
+async function getTripsFullView() {
+    const response = await axios.get(`${config.PATH_BASE}/Trip/FullView`)
+    return response.data;
+}
+
+
 async function getTrip(id) {
     const response = await axios.get(`${config.PATH_BASE}/Trip/Get?id=${id}`)
     return response.data;
@@ -60,6 +66,7 @@ const service = {
     getDate,
     getTrips,
     getTrip,
+    getTripsFullView,
     saveTrip,
     getExpenses,
     getExpenseFullView,
