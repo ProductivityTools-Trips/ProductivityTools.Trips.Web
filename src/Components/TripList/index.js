@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import service from '../../services/apiService'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import moment from 'moment';
 
 function TripList() {
@@ -18,8 +18,9 @@ function TripList() {
 
     return (
         <div>
-        
+
             <p>Trip1s:</p>
+            <p><Link to={"addtrip/"}>AddTrip</Link></p>
             <table>
                 <tbody>
                     <tr>
@@ -35,14 +36,14 @@ function TripList() {
                     {trips && trips.map(x => {
                         return (
                             <tr key={x.tripId}>
-                                <td><Link to={"tripdetail/"+x.tripId}>{x.tripId}</Link></td>
+                                <td><Link to={"tripdetail/" + x.tripId}>{x.tripId}</Link></td>
                                 <td>{x.name}</td>
                                 <td>{x.days}</td>
                                 <td>{x.nights}</td>
                                 <td>{moment(x.start).format('YYYY.MM.DD')}</td>
                                 <td>{moment(x.end).format('YYYY.MM.DD')}</td>
-                                <td>{x.cost}</td>
-                                <td>{x.expensed}</td>
+                                <td>{(x.cost).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.expensed).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                             </tr>)
                     })}
                 </tbody>

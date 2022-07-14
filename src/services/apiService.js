@@ -7,6 +7,12 @@ async function getDate() {
     return response.data;
 }
 
+async function addTrip(trip) {
+    const response = await axios.post(`${config.PATH_BASE}/Trip/Add`, trip)
+    return response.data;
+}
+
+
 async function getTrips() {
     const response = await axios.get(`${config.PATH_BASE}/Trip/List`)
     return response.data;
@@ -64,6 +70,7 @@ async function getCategoryDictionary(){
 
 const service = {
     getDate,
+    addTrip,
     getTrips,
     getTrip,
     getTripsFullView,

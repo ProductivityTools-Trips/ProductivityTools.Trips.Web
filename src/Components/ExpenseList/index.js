@@ -77,10 +77,10 @@ function ExpenseList() {
                                 <td>{x.value}</td>
                                 <td>{x.currencyName}</td>
                                 <td>{x.discount}</td>
-                                <td>{x.valueAfterDiscount}</td>
-                                <td>{x.pln}</td>
-                                <td>{x.plnAfterDiscount}</td>
-                                <td>{x.dayInPln}</td>
+                                <td>{(x.valueAfterDiscount).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.pln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.plnAfterDiscount).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.dayInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td><Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link></td>
                             </tr>
                         )
