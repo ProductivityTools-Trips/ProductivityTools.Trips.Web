@@ -3,6 +3,12 @@ import { CacheContext } from '../../session/CacheContext';
 import service from '../../services/apiService';
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
+import TextField from '@mui/material/TextField';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+
 function ExpenseAdd() {
 
 
@@ -12,6 +18,8 @@ function ExpenseAdd() {
     let cache = useContext(CacheContext);
 
     const [expense, setExpense] = useState({ currencyId: 1, categoryId: 1, tripId: tripId, date: '2022-01-01' })
+    const [value, setValue] = useState(null);
+
 
     const handleChange = (e) => {
         console.log(e);
@@ -34,13 +42,13 @@ function ExpenseAdd() {
             }))
         }
 
-        const markFood=()=>{
+        const markFood = () => {
             let food = cache.categories.find(x => x.name == 'Food');
             setExpense(prevState => ({
                 ...prevState, categoryId: food.categoryId
             }))
         }
-        
+
         if (cache && cache.currencies) {
             console.log(cache)
             markPln();
@@ -79,12 +87,13 @@ function ExpenseAdd() {
             <p><span>Expense Name: </span><span>{expense && expense.name}</span></p>
             <p><span>Expense value: </span><span>{expense && expense.value}</span></p>
             <p><span>Discount value: </span><span>{expense && expense.discount}</span></p>
+            <p><span>Date: </span><span>{expense && expense.date}</span></p>
 
             <p>Name:<input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input></p>
             <p>Value:<input type='edit' name='value' value={expense && expense.value || ""} onChange={handleChange}></input></p>
             <p>Discount: :<input type='edit' name='discount' value={expense && expense.discount || ""} onChange={handleChange}></input></p>
             <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
-            { <p>Currencies:
+            {<p>Currencies:
 
                 {cache && cache.currencies && cache.currencies.map(x => {
                     return (
@@ -93,10 +102,10 @@ function ExpenseAdd() {
                         </span>
                     )
                 })}
-            </p> }
+            </p>}
             <p>
                 Category:
-                { cache && cache.categories && cache.categories.map(x => {
+                {cache && cache.categories && cache.categories.map(x => {
                     return (
                         <span key={x.categoryId}>
                             <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense.categoryId == x.categoryId} name='category'></input>{x.name}
@@ -104,6 +113,21 @@ function ExpenseAdd() {
                     )
                 })}
             </p>
+            <p>date</p>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DatePicker
+                    label="Date"
+                    value={value}
+                    onChange={(newValue) => {
+                        console.log(newValue.format());
+                        setExpense(prevState => ({
+                            ...prevState, date: newValue.format('yyyy-MM-DD')
+                        }));
+                        setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                />
+            </LocalizationProvider>
             <p>
                 <input type="button" value="Add" onClick={addExpense}></input>
             </p>
