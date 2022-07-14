@@ -42,8 +42,8 @@ function TripList() {
                                 <td>{x.nights}</td>
                                 <td>{moment(x.start).format('YYYY.MM.DD')}</td>
                                 <td>{moment(x.end).format('YYYY.MM.DD')}</td>
-                                <td>{(x.cost).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.expensed).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{x.cost && (x.cost).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{x.expensed && (x.expensed).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                             </tr>)
                     })}
                 </tbody>
