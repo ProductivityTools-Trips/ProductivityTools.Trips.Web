@@ -36,9 +36,12 @@ function TripAdd() {
 
     return (
         <div>
-            <p><span>Trip Name: </span><input type='edit' name='name' value={trip && trip.name || ""} onChange={handleChange}></input></p>
+            <p><TextField label="Trip Name" name="name" value={trip && trip.name || ""} onChange={handleChange}></TextField></p>
+            <p><TextField label="Days" type="number" name="days" onChange={handleChange}></TextField></p>
+            <p><TextField label="Nights" type="number" name="nights" onChange={handleChange}></TextField></p>
+
             <LocalizationProvider dateAdapter={AdapterMoment}>
-                <DatePicker
+                <p><DatePicker
                     label="From"
                     value={trip.startDate}
                     onChange={(newValue) => {
@@ -48,8 +51,8 @@ function TripAdd() {
                         }));
                     }}
                     renderInput={(params) => <TextField {...params} />}
-                />
-                <DatePicker
+                /></p>
+                <p><DatePicker
                     label="To"
                     value={trip.endDate}
                     onChange={(newValue) => {
@@ -60,6 +63,7 @@ function TripAdd() {
                     }}
                     renderInput={(params) => <TextField {...params} />}
                 />
+                </p>
             </LocalizationProvider>
             <input type="button" value="Add" onClick={addTrip}></input>
         </div>
