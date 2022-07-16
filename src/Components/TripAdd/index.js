@@ -10,6 +10,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+moment.locale('pl', { week: { dow: 1 } })
 
 function TripAdd() {
 
@@ -33,13 +34,21 @@ function TripAdd() {
         navigate('/', { replace: true })
     }
 
+    const closed=async()=>{
+        // let s=moment(trip.start)  
+        // console.log(s);
+        // let e=moment(trip.end)
+        // let d=e.diff(s,'days');
+        // setTrip(prevState => ({
+        //     ...prevState, 'days': d
+        // }))
+        // console.log(trip);
+    }
+
 
     return (
         <div>
             <p><TextField label="Trip Name" name="name" value={trip && trip.name || ""} onChange={handleChange}></TextField></p>
-            <p><TextField label="Days" type="number" name="days" onChange={handleChange}></TextField></p>
-            <p><TextField label="Nights" type="number" name="nights" onChange={handleChange}></TextField></p>
-
             <LocalizationProvider dateAdapter={AdapterMoment}>
                 <p><DatePicker
                     label="From"
@@ -50,6 +59,7 @@ function TripAdd() {
                             ...prevState, start: newValue.format('yyyy-MM-DD')
                         }));
                     }}
+                    onClose={closed}
                     renderInput={(params) => <TextField {...params} />}
                 /></p>
                 <p><DatePicker
@@ -61,10 +71,13 @@ function TripAdd() {
                             ...prevState, end: newValue.format('yyyy-MM-DD')
                         }));
                     }}
+                    onClose={closed}
                     renderInput={(params) => <TextField {...params} />}
                 />
                 </p>
             </LocalizationProvider>
+            <p><TextField label="Days" type="number" name="days" onChange={handleChange} value={trip.days||''}></TextField></p>
+            <p><TextField label="Nights" type="number" name="nights" onChange={handleChange} value={trip.nights||''}></TextField></p>
             <input type="button" value="Add" onClick={addTrip}></input>
         </div>
     )
