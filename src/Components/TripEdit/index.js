@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import service from '../../services/apiService'
 import { Link } from 'react-router-dom'
-import TripCurrency from "../TripCurrency";
+import TripCurrency from "../TripCurrencyList";
 
 
 

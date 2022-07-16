@@ -1,37 +1,49 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import service from "../../services/apiService";
+
+import { useContext, useEffect, useState } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom'
+import TextField from '@mui/material/TextField';
+import { CacheContext } from '../../session/CacheContext';
+import { FormControlLabel, RadioGroup, Radio } from '@mui/material';
+
 
 function TripCurrency() {
 
-    let params = useParams();
-    const [tripCurrency, setTripCurrency] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const r = await service.getTripCurrency(params.id);
-            setTripCurrency(r);
-        }
-        fetchData();
-    }, [])
+    const [searchParams, setSearchParams] = useSearchParams();
+    const id = parseInt(searchParams.get("tripId"));
+    const cache = useContext(CacheContext)
 
+    const [tripCurrency, setTripCurrency] = useState({ tripId: id })
+
+
+    const handleChange = (newValue) => {
+        setTripCurrency(prevState => ({
+            ...prevState, value: newValue
+        }))
+    }
+
+    const currencyChange = (newValue) => {
+        console.log(newValue.target.value);
+        setTripCurrency(prevState => ({
+            ...prevState, currencyId: newValue.target.value
+        }))
+    }
 
     return (
         <div>
-            <p>TrupCurrency</p>
-            <table>
-                {tripCurrency.map(x=>{
+            TripCurrency
+            <RadioGroup
+                onChange={currencyChange}>
+                {cache && cache.currencies && cache.currencies.map(x => {
                     return (
-                        <tr>
-                            <td>{x.currencyName}</td>
-                            <td>{x.value}</td>
-                        </tr>
+                        <FormControlLabel value={x.currencyId} control={<Radio />} label={x.name}></FormControlLabel>
                     )
                 })}
-            </table>
-        </div>
+            </RadioGroup>
+            <p><TextField label="Value" type="number" onChange={handleChange} value={tripCurrency.value || 0}></TextField></p>
 
+        </div >
     )
 }
 
-export default TripCurrency;
+export default TripCurrency
