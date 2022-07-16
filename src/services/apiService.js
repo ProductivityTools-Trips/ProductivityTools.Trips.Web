@@ -38,6 +38,11 @@ async function getExpense(id){
     return response.data
 }
 
+async function getTripCurrency(id) {
+    const response = await axios.get(`${config.PATH_BASE}/Currency/GetForTrip?tripId=${id}`)
+    return response.data;
+}
+
 async function getExpenses(id){
     const response=await axios.get(`${config.PATH_BASE}/Expense/GetList?tripId=${id}`);
     return response.data
@@ -74,6 +79,7 @@ const service = {
     getTrips,
     getTrip,
     getTripsFullView,
+    getTripCurrency,
     saveTrip,
     getExpenses,
     getExpenseFullView,
