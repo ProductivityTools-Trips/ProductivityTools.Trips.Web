@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import service from "../../services/apiService";
 
-
-
 import Button from '@mui/material/Button';
 
 
@@ -26,7 +24,7 @@ function TripCurrency() {
 
     const addCurrency = () => {
         console.log("add currency")
-        navigate('/tripcurrency?tripid='+params.id, { replace: true })
+        navigate('/tripcurrency?tripId='+params.id, { replace: true })
     }
 
     return (
