@@ -76,6 +76,16 @@ async function getCategoryDictionary() {
     return response.data;
 }
 
+async function addJournal(journal) {
+    const response = await axios.post(`${config.PATH_BASE}/Journal/Add`, journal)
+    return response.data;
+}
+
+async function updateJournal(journal) {
+    const response = await axios.post(`${config.PATH_BASE}/Journal/Update`, journal)
+    return response.data;
+}
+
 const service = {
     getDate,
     addTrip,
@@ -91,7 +101,9 @@ const service = {
     saveExpense,
     addExpense,
     getCurrencyDictionary,
-    getCategoryDictionary
+    getCategoryDictionary,
+    addJournal,
+    updateJournal
 }
 
 export default service;
