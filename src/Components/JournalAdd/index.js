@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import service from "../../services/apiService";
 
-function JournalEdit() {
+function JournalAdd() {
 
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -19,14 +19,15 @@ function JournalEdit() {
         }))
     }
 
-    const save = () => {
+    const save = async () => {
         if (journal.journalId) {
             service.updateJournal(journal)
         }
         else {
-            let id = service.saveJournal(journal)
+            let data = await service.addJournal(journal)
+            console.log(data);
             setjournal(prevState => ({
-                ...prevState, journalId: id
+                ...prevState, journalId: data
             }))
         }
     }
@@ -35,10 +36,10 @@ function JournalEdit() {
         <div>
             JournalAdd
             <p>tripId: {id}</p>
-            <p><TextField label="journal" multiline value={journal} onChange={journalChange} fullWidth></TextField></p>
+            <div><TextField label="journal" multiline value={journal.notes} onChange={journalChange} fullWidth></TextField></div>
             <Button variant="contained" onClick={save}>Save</Button>
         </div>
     )
 }
 
-export default JournalEdit;
+export default JournalAdd;
