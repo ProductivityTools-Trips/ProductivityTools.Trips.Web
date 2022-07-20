@@ -1,3 +1,9 @@
 .App {
   text-align: center;
+  
+}
+
+.wrap{
+  white-space: pre-line;
+  background-color: red;
 }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import service from "../../services/apiService";
 import { useParams } from 'react-router-dom'
+import moment from 'moment';
+
 
 function JournalList() {
 
@@ -17,16 +19,17 @@ function JournalList() {
 
 
     return (
-        <div>
+        <table>
 
-            {console.log("jornals")}
-            {console.log(journals)}
             {journals.map(x => {
                 return (
-                    <div>{x.notes}</div>
+                    <tr>
+                        <td>{moment(x.date).format('YYYY.MM.DD')}</td>
+                        <td><span className="wrap">{x.notes}</span></td>
+                    </tr>
                 )
             })}
-        </div>
+        </table>
     )
 }
 
