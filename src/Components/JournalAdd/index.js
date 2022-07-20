@@ -40,11 +40,10 @@ function JournalAdd() {
 
     const saveAndClose = async () => {
         await save();
-        navigate('/tripdetail/' + id, { replace: true })
+        await close();
     }
     
     const close = async () => {
-        await save();
         navigate('/tripdetail/' + id, { replace: true })
     }
 

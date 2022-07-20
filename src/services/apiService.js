@@ -65,6 +65,11 @@ async function addExpense(expense) {
     const response = await axios.post(`${config.PATH_BASE}/Expense/Add`, expense)
 }
 
+async function deleteExpense(expenseId){
+    const response=await axios.delete(`${config.PATH_BASE}/Expense/Delete?expenseId=${expenseId}`,)
+    return response;
+}
+
 
 async function getCurrencyDictionary() {
     const response = await axios.get(`${config.PATH_BASE}/Dictionary/Currencies`)
@@ -105,6 +110,7 @@ const service = {
     getExpense,
     saveExpense,
     addExpense,
+    deleteExpense,
     getCurrencyDictionary,
     getCategoryDictionary,
     getJournal,

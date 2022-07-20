@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import service from '../../services/apiService';
+import { Button, TextField } from "@mui/material";
 
 function ExpenseEdit() {
 
@@ -28,6 +29,7 @@ function ExpenseEdit() {
     }
     const save = () => {
         service.saveExpense(expense);
+        tripDetails();
     }
 
 
@@ -35,6 +37,10 @@ function ExpenseEdit() {
         navigate('/tripdetail/' + expense.tripId, { replace: true })
     };
 
+    const deleteRecord=()=>{
+        service.deleteExpense(params.id);
+        tripDetails();
+    }
 
     return (
         <div>
@@ -45,6 +51,9 @@ function ExpenseEdit() {
             <p>{expense && expense.name}</p>
             <input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input>
             <button onClick={save}>Save</button>
+            <Button variant="contained" onClick={save}>Save & Close</Button>
+            <Button variant="outlined" onClick={deleteRecord}>Delete</Button>
+            <Button variant="outlined" onClick={tripDetails}>Close</Button>
         </div>)
 }
 export default ExpenseEdit;
