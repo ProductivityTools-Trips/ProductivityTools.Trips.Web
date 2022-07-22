@@ -60,7 +60,7 @@ function TripList() {
     ];
 
     return (
-        <div>
+        <container>
 
             <p>Trip1s:</p>
             <p><Link to={"addtrip/"}>AddTrip</Link></p>
@@ -89,15 +89,15 @@ function TripList() {
                     })}
                 </tbody>
             </table> */}
-            <div style={{ height: 1400, width: '100%' }}>
+            <div style={{ height: 1400}}>
                 {trips && <DataGrid
-                    getRowId={(row) => row.tripId}
+                    getRowId={(row)  => row.tripId}
                     rows={trips}
                     columns={columns}
                     rowHeight={25}
                 />}
             </div>
-        </div>
+        </container>
     )
 }
 
