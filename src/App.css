@@ -1,9 +1,12 @@
 .App {
   text-align: center;
-  
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.875rem
 }
 
-.wrap{
+.wrap {
   white-space: pre-line;
   background-color: red;
 }

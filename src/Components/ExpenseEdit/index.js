@@ -47,10 +47,9 @@ function ExpenseEdit() {
             <p>Expense EditA</p>
             <p>TripDetail</p>
             <p>{expense && expense.tripId}</p>
-            <button onClick={tripDetails}>Back</button>
             <p>{expense && expense.name}</p>
+            <div><TextField label="name" name='name' multiline value={expense && expense.name || ""} onChange={handleChange} fullWidth></TextField></div>
             <input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input>
-            <button onClick={save}>Save</button>
             <Button variant="contained" onClick={save}>Save & Close</Button>
             <Button variant="outlined" onClick={deleteRecord}>Delete</Button>
             <Button variant="outlined" onClick={tripDetails}>Close</Button>
