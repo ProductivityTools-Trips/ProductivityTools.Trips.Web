@@ -1,7 +1,13 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { CacheContext } from '../../session/CacheContext';
+
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import service from '../../services/apiService';
 import { Button, TextField } from "@mui/material";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 function ExpenseEdit() {
 
@@ -9,6 +15,8 @@ function ExpenseEdit() {
     let params = useParams();
     const [expense, setExpense] = useState(null)
     const navigate = useNavigate();
+    let cache = useContext(CacheContext);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,8 +35,8 @@ function ExpenseEdit() {
             ...prevState, [name]: value
         }))
     }
-    const save = () => {
-        service.saveExpense(expense);
+    const save = async () => {
+        await service.saveExpense(expense);
         tripDetails();
     }
 
@@ -37,9 +45,24 @@ function ExpenseEdit() {
         navigate('/tripdetail/' + expense.tripId, { replace: true })
     };
 
-    const deleteRecord=()=>{
+    const deleteRecord = () => {
         service.deleteExpense(params.id);
         tripDetails();
+    }
+
+    const changeCurrency = (e) => {
+        console.log('change currency');
+        console.log(e);
+        setExpense(prevState => ({
+            ...prevState, currencyId: e
+        }))
+    }
+
+    const changeCategory = (e) => {
+        console.log('change category')
+        setExpense(prevState => ({
+            ...prevState, categoryId: e
+        }))
     }
 
     return (
@@ -48,8 +71,46 @@ function ExpenseEdit() {
             <p>TripDetail</p>
             <p>{expense && expense.tripId}</p>
             <p>{expense && expense.name}</p>
-            <div><TextField label="name" name='name' multiline value={expense && expense.name || ""} onChange={handleChange} fullWidth></TextField></div>
-            <input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input>
+            <div><TextField label="name" name='name' value={expense && expense.name || ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="value" name='value' value={expense && expense.value || ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="discount" name='discount' value={expense && expense.discount || ""} onChange={handleChange} fullWidth></TextField></div>
+            <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
+            {<p>Currencies:
+
+                {cache && cache.currencies && cache.currencies.map(x => {
+                    console.log("currency map")
+                    console.log(x);
+                    return (
+                        <span key={x.currencyId}>
+                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.currencyId)} checked={expense.currencyId == x.currencyId} name="currency"></input>{x.name}
+                        </span>
+                    )
+                })}
+            </p>}
+            <p>
+                Category:
+                {cache && cache.categories && cache.categories.map(x => {
+                    return (
+                        <span key={x.categoryId}>
+                            <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense.categoryId == x.categoryId} name='category'></input>{x.name}
+                        </span>
+                    )
+                })}
+            </p>
+            <p>date</p>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DatePicker
+                    label="Date"
+                    value={expense && expense.date}
+                    onChange={(newValue) => {
+                        console.log(newValue.format());
+                        setExpense(prevState => ({
+                            ...prevState, date: newValue.format('yyyy-MM-DD')
+                        }));
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                />
+            </LocalizationProvider>
             <Button variant="contained" onClick={save}>Save & Close</Button>
             <Button variant="outlined" onClick={deleteRecord}>Delete</Button>
             <Button variant="outlined" onClick={tripDetails}>Close</Button>

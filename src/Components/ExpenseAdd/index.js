@@ -3,7 +3,7 @@ import { CacheContext } from '../../session/CacheContext';
 import service from '../../services/apiService';
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import TextField from '@mui/material/TextField';
+import { Button, TextField } from "@mui/material";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -77,6 +77,10 @@ function ExpenseAdd() {
 
     const addExpense = async () => {
         await service.addExpense(expense);
+        close();
+    }
+
+    const close = async () => {
         navigate('/tripdetail/' + expense.tripId, { replace: true })
     }
 
@@ -117,19 +121,19 @@ function ExpenseAdd() {
             <LocalizationProvider dateAdapter={AdapterMoment}>
                 <DatePicker
                     label="Date"
-                    value={value}
+                    value={expense.date}
                     onChange={(newValue) => {
                         console.log(newValue.format());
                         setExpense(prevState => ({
                             ...prevState, date: newValue.format('yyyy-MM-DD')
                         }));
-                        setValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
                 />
             </LocalizationProvider>
             <p>
-                <input type="button" value="Add" onClick={addExpense}></input>
+                <Button variant="contained" onClick={addExpense}>Save & Close</Button>
+                <Button variant="outlined" onClick={close}>Close</Button>
             </p>
         </div>
     )
