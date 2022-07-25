@@ -23,7 +23,7 @@ function JournalList() {
 
             {journals.map(x => {
                 return (
-                    <tr>
+                    <tr key={x.journalId}>
                         <td>{moment(x.date).format('YYYY.MM.DD')}</td>
                         <td><span className="wrap">{x.notes}</span></td>
                     </tr>

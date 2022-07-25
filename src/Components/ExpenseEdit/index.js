@@ -27,6 +27,7 @@ function ExpenseEdit() {
     }, [])
 
     const handleChange = (e) => {
+        debugger;
         console.log(e);
         const { name, value } = e.target;
         console.log(name);
@@ -73,7 +74,7 @@ function ExpenseEdit() {
             <p>{expense && expense.name}</p>
             <div><TextField label="name" name='name' value={expense && expense.name || ""} onChange={handleChange} fullWidth></TextField></div>
             <div><TextField label="value" name='value' value={expense && expense.value || ""} onChange={handleChange} fullWidth></TextField></div>
-            <div><TextField label="discount" name='discount' value={expense && expense.discount || ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="discount" name='discount' value={expense && expense.discount || 0} onChange={handleChange} fullWidth></TextField></div>
             <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
             {<p>Currencies:
 
@@ -82,7 +83,7 @@ function ExpenseEdit() {
                     console.log(x);
                     return (
                         <span key={x.currencyId}>
-                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.currencyId)} checked={expense.currencyId == x.currencyId} name="currency"></input>{x.name}
+                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.currencyId)} checked={expense && expense.currencyId == x.currencyId} name="currency"></input>{x.name}
                         </span>
                     )
                 })}
@@ -92,7 +93,7 @@ function ExpenseEdit() {
                 {cache && cache.categories && cache.categories.map(x => {
                     return (
                         <span key={x.categoryId}>
-                            <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense.categoryId == x.categoryId} name='category'></input>{x.name}
+                            <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense && expense.categoryId == x.categoryId} name='category'></input>{x.name}
                         </span>
                     )
                 })}
@@ -111,9 +112,11 @@ function ExpenseEdit() {
                     renderInput={(params) => <TextField {...params} />}
                 />
             </LocalizationProvider>
-            <Button variant="contained" onClick={save}>Save & Close</Button>
-            <Button variant="outlined" onClick={deleteRecord}>Delete</Button>
-            <Button variant="outlined" onClick={tripDetails}>Close</Button>
+            <p>
+                <Button variant="contained" onClick={save}>Save & Close</Button>
+                <Button variant="outlined" onClick={deleteRecord}>Delete</Button>
+                <Button variant="outlined" onClick={tripDetails}>Close</Button>
+            </p>
         </div>)
 }
 export default ExpenseEdit;
