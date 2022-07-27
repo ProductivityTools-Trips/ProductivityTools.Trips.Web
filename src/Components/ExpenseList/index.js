@@ -59,11 +59,11 @@ function ExpenseList() {
                         <th>Category</th>
                         <th>Value</th>
                         <th>Currency</th>
-                        <th>Discount</th>
-                        <th>Value after Discount</th>
-                        <th>Pln</th>
-                        <th>Pln after discount</th>
-                        <th>Day in Pln</th>
+                        <th>Expensed</th>
+                        <th>Value in Pln</th>
+                        <th>Expensed din Pln</th>
+                        <th>Day value in Pln</th>
+                        <th>Day expensed in Pln</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,11 +76,11 @@ function ExpenseList() {
                                 <td>{x.categoryName}</td>
                                 <td>{x.value}</td>
                                 <td>{x.currencyName}</td>
-                                <td>{x.discount}</td>
-                                <td>{(x.valueAfterDiscount).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.pln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.plnAfterDiscount).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.dayInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{x.expensed}</td>
+                                <td>{(x.valuePln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.dayExpensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td><Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link></td>
                             </tr>
                         )
