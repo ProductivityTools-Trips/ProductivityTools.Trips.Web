@@ -15,60 +15,34 @@
 
 
 
-
-
-
-
-
-
 table.green {
   background-color: #EEF1ED;
   text-align: right;
   border-collapse: collapse;
 }
-
-table.green td,
-table.green th {
+table.green td, table.green th {
   border: 1px solid #AAAAAA;
   padding: 3px 10px;
 }
-
 table.green tbody td {
   font-size: 13px;
 }
-
 table.green tr:nth-child(even) {
   background: #EBFFE9;
 }
-
 table.green thead {
-  background: #03A672;
-  background: -moz-linear-gradient(top, #42bc95 0%, #1caf80 66%, #03A672 100%);
-  background: -webkit-linear-gradient(top, #42bc95 0%, #1caf80 66%, #03A672 100%);
-  background: linear-gradient(to bottom, #42bc95 0%, #1caf80 66%, #03A672 100%);
-  border-bottom: 2px solid #444444;
+    border-bottom: 2px solid #444444;
 }
-
 table.green thead th {
-  font-size: 15px;
   font-weight: bold;
-  color: #FFFFFF;
-  border-left: 2px solid #D0E4F5;
 }
-
-table.green thead th:first-child {
-  border-left: none;
-}
-
 table.green tfoot td {
   font-size: 14px;
 }
-
 table.green tfoot .links {
   text-align: right;
 }
-
-table.green tfoot .links a {
+table.green tfoot .links a{
   display: inline-block;
   background: #1C6EA4;
   color: #FFFFFF;

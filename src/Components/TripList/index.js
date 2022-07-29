@@ -13,7 +13,8 @@ function TripList() {
     useEffect(() => {
         const fetchData = async () => {
             const r = await service.getTripsFullView();
-            setTrips(r);
+            const sorted=r.sort((a,b)=>(a.start > b.start ? -1 : 1))
+            setTrips(sorted);
         }
         fetchData();
     }, [])
