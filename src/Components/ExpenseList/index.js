@@ -50,7 +50,7 @@ function ExpenseList() {
             <div>
                 {cache && cache.currencies && cache.currencies[0].name}
             </div>
-            <table>
+            <table className="green">
                 <thead>
                     <tr>
                         <th>Expense Id</th>
