@@ -24,7 +24,7 @@ function TripList() {
 
             <p>Trip1s:</p>
             <p><Link to={"addtrip/"}>AddTrip</Link></p>
-            <table>
+            <table className='green'>
                 <tbody>
                     <tr>
                         <th>Name</th>

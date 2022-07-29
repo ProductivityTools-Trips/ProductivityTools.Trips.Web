@@ -11,17 +11,26 @@
   background-color: red;
 }
 
+
+
+
+
+
+
+
+
+
+
 table.green {
   background-color: #EEF1ED;
-  width: 100%;
-  text-align: left;
+  text-align: right;
   border-collapse: collapse;
 }
 
 table.green td,
 table.green th {
   border: 1px solid #AAAAAA;
-  padding: 3px 2px;
+  padding: 3px 10px;
 }
 
 table.green tbody td {
