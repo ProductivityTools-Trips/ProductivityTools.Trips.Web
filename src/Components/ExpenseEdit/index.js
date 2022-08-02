@@ -24,7 +24,7 @@ function ExpenseEdit() {
             setExpense(r);
         }
         fetchData();
-    }, [])
+    }, [params.id])
 
     const handleChange = (e) => {
         console.log(e);
@@ -71,9 +71,9 @@ function ExpenseEdit() {
             <p>TripDetail</p>
             <p>{expense && expense.tripId}</p>
             <p>{expense && expense.name}</p>
-            <div><TextField label="Name" name='name'  value={expense && expense.name || ""} onChange={handleChange} fullWidth></TextField></div>
-            <div><TextField label="Value" name='value' type='number' value={expense && expense.value || ""} onChange={handleChange} fullWidth></TextField></div>
-            <div><TextField label="Expensed" name='expensed' type='number' value={expense && expense.expensed || ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="Name" name='name'  value={(expense && expense.name)|| ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="Value" name='value' type='number' value={(expense && expense.value)|| ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="Expensed" name='expensed' type='number' value={(expense && expense.expensed) || ""} onChange={handleChange} fullWidth></TextField></div>
             <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
             {<p>Currencies:
 
@@ -82,7 +82,7 @@ function ExpenseEdit() {
                     console.log(x);
                     return (
                         <span key={x.currencyId}>
-                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.currencyId)} checked={expense && expense.currencyId == x.currencyId} name="currency"></input>{x.name}
+                            <input type="radio" value={x.name} onChange={() => changeCurrency(x.currencyId)} checked={expense && expense.currencyId === x.currencyId} name="currency"></input>{x.name}
                         </span>
                     )
                 })}
@@ -92,7 +92,7 @@ function ExpenseEdit() {
                 {cache && cache.categories && cache.categories.map(x => {
                     return (
                         <span key={x.categoryId}>
-                            <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense && expense.categoryId == x.categoryId} name='category'></input>{x.name}
+                            <input type="radio" value={x.name} onChange={() => changeCategory(x.categoryId)} checked={expense && expense.categoryId === x.categoryId} name='category'></input>{x.name}
                         </span>
                     )
                 })}

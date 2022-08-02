@@ -7,6 +7,7 @@ import { Button, TextField } from "@mui/material";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import moment from 'moment';
 
 
 function ExpenseAdd() {
@@ -16,8 +17,8 @@ function ExpenseAdd() {
     const tripId = parseInt(searchParams.get("tripId"));
     const navigate = useNavigate();
     let cache = useContext(CacheContext);
-
-    const [expense, setExpense] = useState({ currencyId: 1, categoryId: 1, tripId: tripId, date: '2022-01-01' })
+    let cdate=moment().format();
+    const [expense, setExpense] = useState({ currencyId: 1, categoryId: 1, tripId: tripId, date: cdate })
     const [value, setValue] = useState(null);
 
 
