@@ -3,6 +3,7 @@ import service from '../../services/apiService'
 import { useParams, Link } from "react-router-dom";
 import { CacheContext } from '../../session/CacheContext';
 import moment from 'moment';
+import Chart from './chart';
 
 function ExpenseList() {
 
@@ -87,7 +88,7 @@ function ExpenseList() {
                     })}
                 </tbody>
             </table>
-            <p></p>
+            <Chart></Chart>
         </div>
 
     )
