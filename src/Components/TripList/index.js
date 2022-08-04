@@ -25,7 +25,6 @@ function TripList() {
         if (order == 'asc') { setOrder('desc') } else { setOrder('asc') }
 
         const t1 = [...trips]
-        debugger;
         const sorted = t1.sort((a, b) => {
             if (a[field] > b[field]) {
                 return (order == 'asc' ? 1 : -1)
