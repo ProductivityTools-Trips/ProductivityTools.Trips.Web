@@ -88,7 +88,7 @@ function ExpenseList() {
                     })}
                 </tbody>
             </table>
-            <Chart></Chart>
+            <Chart expenses={expenses}></Chart>
         </div>
 
     )
