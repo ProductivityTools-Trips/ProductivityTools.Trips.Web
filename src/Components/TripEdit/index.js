@@ -108,9 +108,13 @@ function TripEdit(props) {
                 />
                 </p>
             </LocalizationProvider>
-            <p><TextField label="Days" type="number" name="days" onChange={handleChange} value={trip && trip.days || 0}></TextField></p>
-            <p><TextField label="Nights" type="number" name="nights" onChange={handleChange} value={trip && trip.nights || 0}></TextField></p>
+            <div><TextField label="Days" type="number" name="days" onChange={handleChange} value={trip && trip.days || 0}></TextField></div>
+            <div><TextField label="Nights" type="number" name="nights" onChange={handleChange} value={trip && trip.nights || 0}></TextField></div>
+            <div><TextField label="Description" type="text" multiline fullWidth name="description" onChange={handleChange} value={trip && trip.description || ''}></TextField></div>
+            <div><TextField label="Learnings" type="text" multiline fullWidth name="learnings" onChange={handleChange} value={trip && trip.learnings || ''}></TextField></div>
+
             <Button onClick={save} variant="contained">Save</Button>
+            
             {props.mode == 'edit' ? <TripCurrency></TripCurrency> : <span></span>}
         </div>
 
