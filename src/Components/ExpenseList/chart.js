@@ -20,8 +20,10 @@ function Chart(props) {
 
 
         props && props.expenses && props.expenses.forEach(element => {
-            if (arrayContains(element) == false) {
-                array.push({ x: new Date(element.date), y: element.dayExpensedInPln });
+            if (element.categoryName != 'Sleep') {
+                if (arrayContains(element) == false) {
+                    array.push({ x: new Date(element.date), y: element.dayExpensedInPln });
+                }
             }
         });
         console.log("filtered");
