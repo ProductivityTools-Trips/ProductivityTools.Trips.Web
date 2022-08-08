@@ -21,10 +21,10 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />}></Route>
             <Route path='addtrip/' element={<TripAdd />}></Route>
-            <Route path='tripedit/:id' element={<TripEdit />}></Route>
+            <Route path='tripedit/:id' element={<TripEdit mode='edit'/>}></Route>
             <Route path='tripdetail/:id' element={<TripDetail />}></Route>
             <Route path='tripcurrency/' element={<TripCurrency />}></Route>
-            <Route path='ExpenseEdit/:id' element={<ExpenseEdit />}></Route>
+            <Route path='ExpenseEdit/:id' element={<ExpenseEdit  />}></Route>
             <Route path='ExpenseAdd/' element={<ExpenseAdd />}></Route>
             <Route path='JournalAdd/' element={<JournalAdd />}></Route>
           </Routes>
