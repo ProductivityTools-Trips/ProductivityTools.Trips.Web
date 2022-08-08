@@ -11,6 +11,8 @@ import TextField from '@mui/material/TextField';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
+
 
 
 
@@ -71,11 +73,8 @@ function TripEdit(props) {
 
     return (
         <div>
-            <Link to={"/"}>triplist</Link>
-
-            <p>{props == 'edit' ? <span>Edit</span> : <span>add</span>}</p>
-            <p>{params.id}</p>
-            <p><input type='edit' name='name' value={trip && trip.name || ""} onChange={handleChange}></input> </p>
+            <Link to={"/"}>Trip List</Link>
+            <p>{props.mode == 'edit' ? <span>Mode: Edit</span> : <span>Mode: Add</span>}</p>
             <p><TextField label="Trip Name" name="name" value={trip && trip.name || ''} onChange={handleChange}></TextField></p>
             <LocalizationProvider dateAdapter={AdapterMoment}>
                 <p><DatePicker
@@ -111,8 +110,8 @@ function TripEdit(props) {
             </LocalizationProvider>
             <p><TextField label="Days" type="number" name="days" onChange={handleChange} value={trip && trip.days || 0}></TextField></p>
             <p><TextField label="Nights" type="number" name="nights" onChange={handleChange} value={trip && trip.nights || 0}></TextField></p>
-            <TripCurrency></TripCurrency>
-            <button onClick={save}>Save</button>
+            <Button onClick={save} variant="contained">Save</Button>
+            {props.mode == 'edit' ? <TripCurrency></TripCurrency> : <span></span>}
         </div>
 
     )
