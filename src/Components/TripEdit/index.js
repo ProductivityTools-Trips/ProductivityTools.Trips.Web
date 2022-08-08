@@ -23,6 +23,9 @@ function TripEdit(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (props.mode == 'add') {
+            setTrip({ start: moment().format('yyyy-MM-DD'), end: moment().format('yyyy-MM-DD') })
+        }
         const fetchData = async () => {
             const r = await service.getTrip(params.id);
             setTrip(r);
