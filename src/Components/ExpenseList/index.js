@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { CacheContext } from '../../session/CacheContext';
 import moment from 'moment';
 import Chart from './chart';
+import PieChart from './piechart';
 
 function ExpenseList() {
 
@@ -88,6 +89,7 @@ function ExpenseList() {
                     })}
                 </tbody>
             </table>
+            <PieChart expenses={expenses}></PieChart>
             <Chart expenses={expenses}></Chart>
         </div>
 
