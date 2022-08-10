@@ -5,9 +5,31 @@ import { XYPlot, LineSeries, HorizontalGridLines, XAxis, YAxis, VerticalGridLine
 
 function PieChart(props) {
 
-    const [pieData, setPieData] = useState({ 'food': [{ x: 2, y: 4 }, { x: 3, y: 6 }],
-    'sleep': [{ x: 2, y: 4 }, { x: 3, y: 6 }] });
+    // const [pieData, setPieData] = useState({ 'food': [{ x: 2, y: 4 }, { x: 3, y: 6 }],
+    // 'sleep': [{ x: 2, y: 4 }, { x: 3, y: 6 }] });
 
+
+    const [pieData, setPieData] = useState(
+        [
+            {
+                'category': 'food', 
+                'elements': 
+                [
+                    { x: 2, y: 4 }, 
+                    { x: 3, y: 6 }
+                ]
+            },
+      
+            {
+                'category': 'sleep', 
+                'elements': 
+                [
+                    { x: 2, y: 4 }, 
+                    { x: 3, y: 10 }
+                ]
+            }
+        ]
+    )
     console.log("piedata");
     console.log(pieData)
 
@@ -25,10 +47,11 @@ function PieChart(props) {
             return null;
         }
 
-console.log("df")
-    /  //  console.log(props && props.expenses && props.expenses.length);
-    ///    console.log(pieData.length);
+    console.log("df")
+    console.log(props.expenses && props.expenses);
         props && props.expenses && props.expenses.forEach(element => {
+            console.log("debugger")
+            debugger;
             let x = findCategory(element);
             if (x == null) {
                 let newElement = { x: 2, y: element.expensed }
@@ -58,8 +81,8 @@ console.log("df")
                     <HorizontalGridLines />
                     <XAxis />
                     <YAxis />
-                    <VerticalBarSeries data={pieData["food"]}  />
-                    <VerticalBarSeries data={pieData["sleep"]} />
+                    <VerticalBarSeries data={pieData[0].elements}  />
+                    <VerticalBarSeries data={pieData[1].elements} />
                 </XYPlot>
             </div>
         </div>
