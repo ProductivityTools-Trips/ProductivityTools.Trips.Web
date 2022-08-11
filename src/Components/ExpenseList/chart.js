@@ -3,9 +3,6 @@ import { XYPlot, LineSeries, HorizontalGridLines, XAxis, YAxis, VerticalGridLine
 import { useEffect, useState } from 'react';
 
 function Chart(props) {
-    console.log("chart")
-    console.log(props.expenses);
-
     const [d, setd] = useState([]);
     useEffect(() => {
 
@@ -26,8 +23,7 @@ function Chart(props) {
                 }
             }
         });
-        console.log("filtered");
-        console.log(array);
+
         setd(array);
     }, [props.expenses])
 

@@ -37,22 +37,26 @@ function PieChart(props) {
         //food row //x=day=2, y=food,x=day=3, y=food
         //sleep row //x=day=2, y=sleep, x=day=3
 
-        const findCategory = (element) => {
+        const findCategory = (category) => {
             debugger;
             for (var i = 0; i < pieData.length; i++) {
                 debugger;
                 console.log("findcategory");
                 console.log(pieData[i]);
+                if (pieData[i].category==category)
+                {
+                    return pieData[i];
+                }
             }
             return null;
         }
 
-    console.log("df")
-    console.log(props.expenses && props.expenses);
+        console.log("df")
+        console.log(props.expenses && props.expenses);
         props && props.expenses && props.expenses.forEach(element => {
             console.log("debugger")
             debugger;
-            let x = findCategory(element);
+            let x = findCategory(element.category);
             if (x == null) {
                 let newElement = { x: 2, y: element.expensed }
                 let pd = pieData;
@@ -70,7 +74,7 @@ function PieChart(props) {
         );
         //console.log(pieData);
 
-    }, [])
+    }, [props.expenses])
 
     return (
         <div>
