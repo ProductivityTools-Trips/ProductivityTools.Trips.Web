@@ -22,11 +22,22 @@ function PieChart(props) {
             },
 
             {
-                'category': 'sleep',
+                'category': 'Sleep',
                 'dataPoints':
                     [
                         { x: 1, y: 1 },
                         { x: 2, y: 1 }
+                    ]
+            },
+
+            {
+                'category': 'Fun',
+                'dataPoints':
+                    [
+                        { x: 1, y: 1 },
+                        { x: 2, y: 1 },
+                        { x: 3, y: 1 },
+
                     ]
             }
         ]
@@ -59,27 +70,23 @@ function PieChart(props) {
             console.log(x);
             console.log(expense);
             if (x == null) {
-                let newElement = { x: 2, y: expense.value }
-                let pd = pieData;
-                //  pd.push(newElement);
+                x = { 'category': expense.categoryName, dataPoints: [] }
+                pieValues = [...pieValues, x];
 
 
             }
-            else {
-                let updated = false;
-                x.dataPoints.forEach(e => {
-                    debugger;
-                    if (e.x == (new Date(expense.date).getDay())) {
-                        e.y = e.y + expense.expensed;
-                        updated = true;
-                    }
-                })
-                if (updated == false) {
-                    x.dataPoints = [...x.dataPoints, { x: (new Date(expense.date)).getDay(), y: expense.expensed }]
+            let updated = false;
+            x.dataPoints.forEach(e => {
+                debugger;
+                if (e.x == (new Date(expense.date).getDate())) {
+                    e.y = e.y + expense.value;
+                    updated = true;
                 }
-                //update element
-                //set state
+            })
+            if (updated == false) {
+                x.dataPoints = [...x.dataPoints, { x: (new Date(expense.date)).getDate(), y: expense.value }]
             }
+
             setPieData(pieValues);
             // if (arrayContains(element) == false) {
             //     array.push({ x: new Date(element.date), y: element.dayExpensedInPln });
@@ -98,8 +105,11 @@ function PieChart(props) {
                     <HorizontalGridLines />
                     <XAxis />
                     <YAxis />
-                    <VerticalBarSeries data={pieData[0].dataPoints} />
-                    <VerticalBarSeries data={pieData[1].dataPoints} />
+                    {pieData.map(e => {
+                        return (<VerticalBarSeries data={e.dataPoints} />)
+                    })}
+                    {/* <VerticalBarSeries data={pieData[0].dataPoints} />
+                    <VerticalBarSeries data={pieData[1].dataPoints} /> */}
                 </XYPlot>
             </div>
         </div>
