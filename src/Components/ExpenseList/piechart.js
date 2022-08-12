@@ -13,19 +13,19 @@ function PieChart(props) {
         [
             {
                 'category': 'food', 
-                'elements': 
+                'dataPoints': 
                 [
-                    { x: 2, y: 4 }, 
-                    { x: 3, y: 6 }
+                    { x: 1, y: 4 }, 
+                    { x: 2, y: 6 }
                 ]
             },
-      
+       
             {
                 'category': 'sleep', 
-                'elements': 
+                'dataPoints': 
                 [
-                    { x: 2, y: 4 }, 
-                    { x: 3, y: 10 }
+                    { x: 3, y: 4 }, 
+                    { x: 4, y: 10 }
                 ]
             }
         ]
@@ -38,9 +38,7 @@ function PieChart(props) {
         //sleep row //x=day=2, y=sleep, x=day=3
 
         const findCategory = (category) => {
-            debugger;
             for (var i = 0; i < pieData.length; i++) {
-                debugger;
                 console.log("findcategory");
                 console.log(pieData[i]);
                 if (pieData[i].category==category)
@@ -53,18 +51,24 @@ function PieChart(props) {
 
         console.log("df")
         console.log(props.expenses && props.expenses);
-        props && props.expenses && props.expenses.forEach(element => {
+        props && props.expenses && props.expenses.forEach(expense => {
+            let x = findCategory(expense.categoryName);
             console.log("debugger")
-            debugger;
-            let x = findCategory(element.category);
+            console.log(x);
+            console.log(expense);
             if (x == null) {
-                let newElement = { x: 2, y: element.expensed }
+                let newElement = { x: 2, y: expense.expensed }
                 let pd = pieData;
               //  pd.push(newElement);
                
 
             }
             else {
+                x.dataPoints.forEach(e=>{
+                    if(e.x==1){
+                        e.y=e.y+expense.expensed;
+                    }
+                })
                 //update element
                 //set state
             }
@@ -80,7 +84,7 @@ function PieChart(props) {
         <div>
             <span>PieChart</span>
             <div>
-                <XYPlot width={300} height={300} stackBy="y">
+                <XYPlot  width={300} height={300} stackBy="y" >
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis />
