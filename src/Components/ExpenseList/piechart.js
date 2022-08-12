@@ -1,3 +1,4 @@
+import { executeInTheNextEventLoopTick } from '@mui/x-date-pickers/internals';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { XYPlot, LineSeries, HorizontalGridLines, XAxis, YAxis, VerticalGridLines, VerticalBarSeries } from 'react-vis';
@@ -12,21 +13,21 @@ function PieChart(props) {
     const [pieData, setPieData] = useState(
         [
             {
-                'category': 'Food', 
-                'dataPoints': 
-                [
-                    { x: 1, y: 1 }, 
-                    { x: 2, y: 1 }
-                ]
+                'category': 'Food',
+                'dataPoints':
+                    [
+                        { x: 1, y: 1 },
+                        { x: 2, y: 1 }
+                    ]
             },
-       
+
             {
-                'category': 'sleep', 
-                'dataPoints': 
-                [
-                    { x: 1, y: 1 }, 
-                    { x: 2, y: 1 }
-                ]
+                'category': 'sleep',
+                'dataPoints':
+                    [
+                        { x: 1, y: 1 },
+                        { x: 2, y: 1 }
+                    ]
             }
         ]
     )
@@ -41,8 +42,7 @@ function PieChart(props) {
             for (var i = 0; i < pieValues.length; i++) {
                 console.log("findcategory");
                 console.log(pieData[i]);
-                if (pieValues[i].category==category)
-                {
+                if (pieValues[i].category == category) {
                     return pieValues[i];
                 }
             }
@@ -53,33 +53,37 @@ function PieChart(props) {
         console.log(props.expenses && props.expenses);
         props && props.expenses && props.expenses.forEach(expense => {
             debugger;
-            let pieValues=pieData
-            let x = findCategory(pieValues,expense.categoryName);
+            let pieValues = pieData
+            let x = findCategory(pieValues, expense.categoryName);
             console.log("debugger")
             console.log(x);
             console.log(expense);
             if (x == null) {
                 let newElement = { x: 2, y: expense.value }
                 let pd = pieData;
-              //  pd.push(newElement);
-               
+                //  pd.push(newElement);
+
 
             }
             else {
-                x.dataPoints.forEach(e=>{
+                let updated = false;
+                x.dataPoints.forEach(e => {
                     debugger;
-                    if(e.x==1){
-                        e.y=e.y+expense.expensed;
+                    if (e.x == (new Date(expense.date).getDay())) {
+                        e.y = e.y + expense.expensed;
+                        updated = true;
                     }
-
-                 })
+                })
+                if (updated == false) {
+                    x.dataPoints = [...x.dataPoints, { x: (new Date(expense.date)).getDay(), y: expense.expensed }]
+                }
                 //update element
                 //set state
             }
             setPieData(pieValues);
             // if (arrayContains(element) == false) {
             //     array.push({ x: new Date(element.date), y: element.dayExpensedInPln });
-            }
+        }
         );
         //console.log(pieData);
 
@@ -89,12 +93,12 @@ function PieChart(props) {
         <div>
             <span>PieChart</span>
             <div>
-                <XYPlot  width={300} height={300} stackBy="y" >
+                <XYPlot width={300} height={300} stackBy="y" >
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis />
                     <YAxis />
-                    <VerticalBarSeries data={pieData[0].dataPoints}  />
+                    <VerticalBarSeries data={pieData[0].dataPoints} />
                     <VerticalBarSeries data={pieData[1].dataPoints} />
                 </XYPlot>
             </div>
