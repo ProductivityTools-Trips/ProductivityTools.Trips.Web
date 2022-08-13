@@ -100,16 +100,16 @@ function PieChart(props) {
         <div>
             <span>PieChart</span>
             <div>
-                <XYPlot width={300} height={300} stackBy="y" >
+                <XYPlot width={300} height={300} >
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis />
                     <YAxis />
-                    {pieData.map(e => {
+                    {/* {pieData.map(e => {
                         return (<VerticalBarSeries data={e.dataPoints} />)
-                    })}
-                    {/* <VerticalBarSeries data={pieData[0].dataPoints} />
-                    <VerticalBarSeries data={pieData[1].dataPoints} /> */}
+                    })} */}
+                    <VerticalBarSeries data={pieData[0].dataPoints} />
+                    <VerticalBarSeries data={pieData[1].dataPoints} />
                 </XYPlot>
             </div>
         </div>
