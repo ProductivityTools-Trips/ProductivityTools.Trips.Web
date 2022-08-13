@@ -17,7 +17,7 @@ function PieChart(props) {
                 'dataPoints':
                     [
                         { x: 1, y: 1 },
-                        { x: 2, y: 1 }
+                        // { x: 2, y: 1 }
                     ]
             },
 
@@ -26,7 +26,7 @@ function PieChart(props) {
                 'dataPoints':
                     [
                         { x: 1, y: 1 },
-                        { x: 2, y: 1 }
+                        // { x: 2, y: 1 }
                     ]
             },
 
@@ -49,6 +49,20 @@ function PieChart(props) {
         //food row //x=day=2, y=food,x=day=3, y=food
         //sleep row //x=day=2, y=sleep, x=day=3
 
+        const addCategories = (pieValues) => {
+            let categories = []
+            props && props.expenses && props.expenses.forEach(expense => {
+                if (categories.indexOf(expense.categoryName)) {
+                    categories.push(expense.categoryName)
+                }
+            })
+
+            categories.forEach(category=>{
+                let x = { 'category': category, dataPoints: [] }
+                pieValues = [...pieValues, x];
+            })
+        }
+
         const findCategory = (pieValues, category) => {
             for (var i = 0; i < pieValues.length; i++) {
                 console.log("findcategory");
@@ -65,15 +79,15 @@ function PieChart(props) {
         props && props.expenses && props.expenses.forEach(expense => {
             debugger;
             let pieValues = pieData
+            addCategories(pieValues);
             let x = findCategory(pieValues, expense.categoryName);
-            console.log("debugger")
-            console.log(x);
-            console.log(expense);
+            // console.log("debugger")
+            // console.log(x);
+            // console.log(expense);
             if (x == null) {
-                x = { 'category': expense.categoryName, dataPoints: [] }
-                pieValues = [...pieValues, x];
-
-
+                debugger;
+                // x = { 'category': expense.categoryName, dataPoints: [] }
+                // pieValues = [...pieValues, x];
             }
             let updated = false;
             x.dataPoints.forEach(e => {
@@ -108,8 +122,15 @@ function PieChart(props) {
                     {/* {pieData.map(e => {
                         return (<VerticalBarSeries data={e.dataPoints} />)
                     })} */}
-                    <VerticalBarSeries data={pieData[0].dataPoints} />
-                    <VerticalBarSeries data={pieData[1].dataPoints} />
+                    <VerticalBarSeries data={[
+                        { x: 1, y: 1 },
+                        { x: 2, y: 1 }
+                    ]} />
+                    <VerticalBarSeries data={[
+                        { x: 3, y: 1 },
+                        { x: 4, y: 1 }
+                    ]} />
+                    {/* <VerticalBarSeries data={pieData[1].dataPoints} /> */}
                 </XYPlot>
             </div>
         </div>
