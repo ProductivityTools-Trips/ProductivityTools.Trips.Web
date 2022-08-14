@@ -16,7 +16,7 @@ function PieChart(props) {
                 'category': 'Food',
                 'dataPoints':
                     [
-                        { x: 10, y: 1 },
+                        { x: 'a', y: 1 },
                         // { x: 2, y: 1 }
                     ]
             },
@@ -80,7 +80,7 @@ function PieChart(props) {
         props && props.expenses && props.expenses.forEach(expense => {
             debugger;
             let pieValues = pieData
-            pieValues=addCategories(pieValues);
+            pieValues = addCategories(pieValues);
 
             for (var i = 0; i < pieValues.length; i++) {
                 let updated = false;
@@ -93,7 +93,7 @@ function PieChart(props) {
                         }
                     }
                 })
-                
+
                 if (updated == false) {
                     if (pieValues[i].category == expense.categoryName) {
                         pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: expense.value }]
@@ -139,7 +139,8 @@ function PieChart(props) {
         <div>
             <span>PieChart</span>
             <div>
-                <XYPlot width={300} height={300} >
+                <XYPlot width={300} height={300}  xType="ordinal"
+          stackBy="y" >
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis />
@@ -147,13 +148,17 @@ function PieChart(props) {
                     {pieData.map(e => {
                         return (<VerticalBarSeries data={e.dataPoints} />)
                     })}
-                    {/* <VerticalBarSeries data={[
-                        { x: 1, y: 1 },
-                        { x: 2, y: 1 }
+                    {/* <VerticalBarSeries cluster="2015" data={[
+                        { x: 'Q1', y: 3 },
+                        { x: 'Q2', y: 8 },
+                        { x: 'Q3', y: 11 },
+                        { x: 'Q4', y: 19 }
                     ]} />
-                    <VerticalBarSeries data={[
-                        { x: 3, y: 1 },
-                        { x: 4, y: 1 }
+                    <VerticalBarSeries cluster="2015" data={[
+                        { x: 'Q1', y: 3 },
+                        { x: 'Q2', y: 8 },
+                        { x: 'Q3', y: 11 },
+                        { x: 'Q4', y: 19 }
                     ]} /> */}
                     {/* <VerticalBarSeries data={pieData[1].dataPoints} /> */}
                 </XYPlot>
