@@ -18,7 +18,7 @@ function Home() {
     return (
         <div>
             <p>{date}</p>
-            Hello1
+            Hello
             <div>
                 <TripList />
             </div>
