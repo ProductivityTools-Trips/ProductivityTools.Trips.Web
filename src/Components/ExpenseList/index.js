@@ -15,6 +15,10 @@ function ExpenseList() {
     useEffect(() => {
         const fetchData = async () => {
             const r = await service.getExpenseFullView(params.id);
+            r.map(x => {
+                x.checked = true;
+                return x;
+            })
             setExpenses(r);
         }
         fetchData();
@@ -23,28 +27,19 @@ function ExpenseList() {
     console.log("cx");
     console.log(cache);
 
-    // const getCategoryName=(id)=>{
-    //     if (cache && cache.categories){
-    //         let val=cache.categories.find(x=>x.categoryId==id);
-    //         return val.name;
-    //     }
-    //     else
-    //     {
-    //         return id;
-    //     }
-    // }
-
-    // const getCurrencyName=(id)=>{
-    //     if (cache && cache.currencies){
-    //         let val=cache.currencies.find(x=>x.currencyId==id);
-    //         return val.name;
-    //     }
-    //     else
-    //     {
-    //         return id;
-    //     }
-    // }
-
+    const markExpenseForChart = (id, event) => {
+        let newList = [...expenses]
+        for (var i = 0; i < newList.length; i++) {
+            if (newList[i].expenseId == id) {
+                newList[i].checked = !newList[i].checked;
+                console.log("checked chaned");
+            }
+        }
+        setExpenses(newList);
+        console.log("markExpenseForChart")
+        console.log(id);
+        console.log(event);
+    }
 
     return (
         <div>
@@ -66,6 +61,7 @@ function ExpenseList() {
                         <th>Expensed din Pln</th>
                         <th>Day value in Pln</th>
                         <th>Day expensed in Pln</th>
+                        <th>Chart</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,6 +79,7 @@ function ExpenseList() {
                                 <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.dayExpensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td><input name="fsda" type="checkbox" checked={x.checked} onChange={(e) => markExpenseForChart(x.expenseId, e)}></input></td>
                                 <td><Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link></td>
                             </tr>
                         )

@@ -20,15 +20,16 @@ function JournalList() {
 
     return (
         <table>
-
-            {journals.map(x => {
-                return (
-                    <tr key={x.journalId}>
-                        <td>{moment(x.date).format('YYYY.MM.DD')}</td>
-                        <td><span className="wrap">{x.notes}</span></td>
-                    </tr>
-                )
-            })}
+            <tbody>
+                {journals.map(x => {
+                    return (
+                        <tr key={x.journalId}>
+                            <td>{moment(x.date).format('YYYY.MM.DD')}</td>
+                            <td><span className="wrap">{x.notes}</span></td>
+                        </tr>
+                    )
+                })}
+            </tbody>
         </table>
     )
 }

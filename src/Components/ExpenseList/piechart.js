@@ -1,7 +1,7 @@
 import { executeInTheNextEventLoopTick } from '@mui/x-date-pickers/internals';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { XYPlot, LineSeries, HorizontalGridLines, XAxis, YAxis, VerticalGridLines, VerticalBarSeries } from 'react-vis';
+import { XYPlot, LineSeries, HorizontalGridLines, XAxis, YAxis, VerticalGridLines, DiscreteColorLegend, VerticalBarSeries } from 'react-vis';
 
 
 function PieChart(props) {
@@ -49,7 +49,7 @@ function PieChart(props) {
         const addCategories = (pieValues) => {
             let categories = []
             props && props.expenses && props.expenses.forEach(expense => {
-                if (categories.indexOf(expense.categoryName) == -1) {
+                if (expense.checked && categories.indexOf(expense.categoryName) == -1) {
                     categories.push(expense.categoryName)
                 }
             })
@@ -61,36 +61,35 @@ function PieChart(props) {
             return pieValues;
         }
         let pieValues = [];// = pieData
-        debugger;
         pieValues = addCategories(pieValues);
         console.log(props.expenses && props.expenses);
         props && props.expenses && props.expenses.forEach(expense => {
-            debugger;
-
-
-            for (var i = 0; i < pieValues.length; i++) {
-                let updated = false;
-                pieValues[i].dataPoints.forEach(e => {
-                    if (e.x == (new Date(expense.date).getDate())) {
-                        if (pieValues[i].category == expense.categoryName) {
-                            e.y = e.y + expense.value;
-                            updated = true;
+            if (expense.checked) {
+                for (var i = 0; i < pieValues.length; i++) {
+                    let updated = false;
+                    pieValues[i].dataPoints.forEach(e => {
+                        if (e.x == (new Date(expense.date).getDate())) {
+                            if (pieValues[i].category == expense.categoryName) {
+                                e.y = e.y + expense.valuePln;
+                                updated = true;
+                            }
                         }
-                    }
-                })
+                    })
 
-                if (updated == false) {
-                    if (pieValues[i].category == expense.categoryName) {
-                        pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: expense.value }]
-                    }
-                    else {
-                        pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: 0 }]
+                    if (updated == false) {
+                        if (pieValues[i].category == expense.categoryName) {
+                            pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: expense.value }]
+                        }
+                        else {
+                            pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: 0 }]
 
+                        }
                     }
                 }
             }
         }
         );
+        console.log(pieValues);
         setPieData(pieValues);
 
     }, [props.expenses])
@@ -99,6 +98,10 @@ function PieChart(props) {
         <div>
             <span>PieChart</span>
             <div>
+                <DiscreteColorLegend
+                    width={180}
+                    items={pieData.map(x => x.category)}
+                />
                 <XYPlot width={300} height={300} xType="ordinal"
                     stackBy="y" >
                     <VerticalGridLines />
