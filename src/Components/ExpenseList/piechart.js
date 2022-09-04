@@ -49,7 +49,7 @@ function PieChart(props) {
         const addCategories = (pieValues) => {
             let categories = []
             props && props.expenses && props.expenses.forEach(expense => {
-                if (categories.indexOf(expense.categoryName)) {
+                if (categories.indexOf(expense.categoryName) == -1) {
                     categories.push(expense.categoryName)
                 }
             })
@@ -61,12 +61,13 @@ function PieChart(props) {
             return pieValues;
         }
         let pieValues = [];// = pieData
+        debugger;
         pieValues = addCategories(pieValues);
         console.log(props.expenses && props.expenses);
         props && props.expenses && props.expenses.forEach(expense => {
             debugger;
 
-            
+
             for (var i = 0; i < pieValues.length; i++) {
                 let updated = false;
                 pieValues[i].dataPoints.forEach(e => {
