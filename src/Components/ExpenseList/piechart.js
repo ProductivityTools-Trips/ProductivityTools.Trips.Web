@@ -97,21 +97,25 @@ function PieChart(props) {
     return (
         <div>
             <span>PieChart</span>
-            <div>
-                <DiscreteColorLegend
-                    width={180}
-                    items={pieData.map(x => x.category)}
-                />
-                <XYPlot width={300} height={300} xType="ordinal"
-                    stackBy="y" >
-                    <VerticalGridLines />
-                    <HorizontalGridLines />
-                    <XAxis />
-                    <YAxis />
-                    {pieData.map(e => {
-                        return (<VerticalBarSeries data={e.dataPoints} />)
-                    })}
-                    {/* <VerticalBarSeries cluster="2015" data={[
+            <div style={{ width: '1300px', border: '1px solid black' }}>
+                <div style={{ width: "200px", border: "1px solid red", float:"left"}}>
+                    <DiscreteColorLegend
+                        width={180}
+                        items={pieData.map(x => x.category)}
+                    />
+                </div>
+                <div style={{ width: "300px", border: "1px solid red", overflow:"hidden" }}>
+                    <XYPlot width={300} height={300} xType="ordinal"
+                        stackBy="y"
+                    >
+                        <VerticalGridLines />
+                        <HorizontalGridLines />
+                        <XAxis />
+                        <YAxis />
+                        {pieData.map(e => {
+                            return (<VerticalBarSeries data={e.dataPoints} />)
+                        })}
+                        {/* <VerticalBarSeries cluster="2015" data={[
                         { x: 'Q1', y: 3 },
                         { x: 'Q2', y: 8 },
                         { x: 'Q3', y: 11 },
@@ -123,8 +127,9 @@ function PieChart(props) {
                         { x: 'Q3', y: 11 },
                         { x: 'Q4', y: 19 }
                     ]} /> */}
-                    {/* <VerticalBarSeries data={pieData[1].dataPoints} /> */}
-                </XYPlot>
+                        {/* <VerticalBarSeries data={pieData[1].dataPoints} /> */}
+                    </XYPlot>
+                </div>
             </div>
         </div>
     )

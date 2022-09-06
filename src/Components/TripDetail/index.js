@@ -9,14 +9,14 @@ import service from '../../services/apiService'
 function TripDetail() {
 
     let params = useParams();
-    const [trip, setTrip] = useState(null);
-    useEffect(() => {
-        const fetchData = async () => {
-            const r = await service.getTrip(params.id);
-            setTrip(r);
-        }
-        fetchData();
-    }, [])
+    // const [trip, setTrip] = useState(null);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const r = await service.getTrip(params.id);
+    //         setTrip(r);
+    //     }
+    //     fetchData();
+    // }, [])
 
     return (
         <div>
@@ -25,7 +25,7 @@ function TripDetail() {
             <Link to={"/expenseadd/?tripId=" + params.id}>AddExpense</Link>
             <Link to={"/journaladd/?tripId=" + params.id}>Add Notes</Link>
             <p>TripDetail</p>
-            <p>{trip.description}</p>
+            {/* <p>{trip.description}</p> */}
             <ExpenseList></ExpenseList>
             <JournalList></JournalList>
         </div>)
