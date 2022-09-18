@@ -66,23 +66,25 @@ function PieChart(props) {
         props && props.expenses && props.expenses.forEach(expense => {
             if (expense.checked) {
                 for (var i = 0; i < pieValues.length; i++) {
-                    let updated = false;
-                    pieValues[i].dataPoints.forEach(e => {
-                        if (e.x == (new Date(expense.date).getDate())) {
-                            if (pieValues[i].category == expense.categoryName) {
-                                e.y = e.y + expense.valuePln;
-                                updated = true;
+                    if (pieValues[i].category == expense.categoryName) {
+                        let updated = false;
+                        pieValues[i].dataPoints.forEach(e => {
+                            if (e.x == (new Date(expense.date).getDate())) {
+                                if (pieValues[i].category == expense.categoryName) {
+                                    e.y = e.y + expense.valuePln;
+                                    updated = true;
+                                }
                             }
-                        }
-                    })
+                        })
 
-                    if (updated == false) {
-                        if (pieValues[i].category == expense.categoryName) {
-                            pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: expense.value }]
-                        }
-                        else {
-                            pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: 0 }]
+                        if (updated == false) {
+                            if (pieValues[i].category == expense.categoryName) {
+                                pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: expense.value }]
+                            }
+                            else {
+                                pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: 0 }]
 
+                            }
                         }
                     }
                 }
@@ -98,13 +100,13 @@ function PieChart(props) {
         <div>
             <span>PieChart</span>
             <div style={{ width: '1300px', border: '1px solid black' }}>
-                <div style={{ width: "200px", border: "1px solid red", float:"left"}}>
+                <div style={{ width: "200px", border: "1px solid red", float: "left" }}>
                     <DiscreteColorLegend
                         width={180}
                         items={pieData.map(x => x.category)}
                     />
                 </div>
-                <div style={{ width: "300px", border: "1px solid red", overflow:"hidden" }}>
+                <div style={{ width: "300px", border: "1px solid red", overflow: "hidden" }}>
                     <XYPlot width={300} height={300} xType="ordinal"
                         stackBy="y"
                     >
