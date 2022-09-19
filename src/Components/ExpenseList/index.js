@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { CacheContext } from '../../session/CacheContext';
 import moment from 'moment';
 import Chart from './chart';
-import PieChart from './piechart';
+import BarChart from './barchart';
 
 function ExpenseList() {
 

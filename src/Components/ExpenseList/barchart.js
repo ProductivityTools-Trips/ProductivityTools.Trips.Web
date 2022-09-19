@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { XYPlot, LineSeries, HorizontalGridLines, XAxis, YAxis, VerticalGridLines, DiscreteColorLegend, VerticalBarSeries } from 'react-vis';
 
 
-function PieChart(props) {
+function BarChart(props) {
 
     // const [pieData, setPieData] = useState({ 'food': [{ x: 2, y: 4 }, { x: 3, y: 6 }],
     // 'sleep': [{ x: 2, y: 4 }, { x: 3, y: 6 }] });
@@ -137,4 +137,4 @@ function PieChart(props) {
     )
 }
 
-export default PieChart;
+export default BarChart;
