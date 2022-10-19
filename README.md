@@ -8,3 +8,10 @@
         <img src="Images/Header/LogoTitle_green_500px.png" />
     </a>
 </p>
+
+# Trips
+
+- Web to the trips application
+- Allow to store the expences done during the trip
+- Allow to store daily summary of the trip
+![](Images/2022-10-19-12-23-53.png)
