@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import service from "../../services/apiService";
-import { useParams } from 'react-router-dom'
+import { useParams,Link } from 'react-router-dom'
 import moment from 'moment';
 
 
@@ -26,6 +26,9 @@ function JournalList() {
                         <tr key={x.journalId}>
                             <td>{moment(x.date).format('YYYY.MM.DD')}</td>
                             <td><span className="wrap">{x.notes}</span></td>
+                            <td>
+                                <Link to={"/JournalEdit/?tripId=" + params.id} > Edit</Link>
+                            </td>
                         </tr>
                     )
                 })}

@@ -86,7 +86,7 @@ function ExpenseList() {
                     })}
                 </tbody>
             </table>
-            <PieChart expenses={expenses}></PieChart>
+            <BarChart expenses={expenses}></BarChart>
             <Chart expenses={expenses}></Chart>
         </div>
 
