@@ -9,7 +9,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 
 
-function JournalAdd() {
+function JournalEdit() {
 
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -74,4 +74,4 @@ function JournalAdd() {
     )
 }
 
-export default JournalAdd;
+export default JournalEdit;
