@@ -3,7 +3,7 @@ const dev = {
 }
 
 const prd = {
-    PATH_BASE: 'https://apitrips.productivitytools.tech:8070/api'
+    PATH_BASE: 'https://apitrips.productivitytools.top:8070/api'
 }
 
 export const config = process.env.NODE_ENV === 'development' ? dev : prd;
