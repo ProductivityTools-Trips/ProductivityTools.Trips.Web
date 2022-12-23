@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import service from "../../services/apiService";
 
@@ -13,11 +13,24 @@ function JournalEdit() {
 
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const id = parseInt(searchParams.get("tripId"));
+    const tripId = parseInt(searchParams.get("tripId"));
+    const journalId = parseInt(searchParams.get("journalId"));
 
 
-    const [journal, setjournal] = useState({ tripId: id, date:moment() });
+    const [journal, setjournal] = useState({ tripId: tripId, journalId: journalId, date: moment() });
 
+    useEffect(()=>{
+        const getJournal=async ()=>{
+            let data=await service.getJournal(journalId)
+            console.log(data);
+            setjournal(data);
+        }
+        debugger;
+        if (journalId!=undefined)
+        {
+            getJournal();
+        }
+    },[journalId])
 
     const journalChange = (newValue) => {
         setjournal(prevState => ({
@@ -27,7 +40,7 @@ function JournalEdit() {
 
     const save = async () => {
         if (journal.journalId) {
-            service.updateJournal(journal)
+            await service.updateJournal(journal)
         }
         else {
             let data = await service.addJournal(journal)
@@ -42,15 +55,16 @@ function JournalEdit() {
         await save();
         await close();
     }
-    
+
     const close = async () => {
-        navigate('/tripdetail/' + id, { replace: true })
+        navigate('/tripdetail/' + tripId, { replace: true })
     }
 
     return (
         <div>
             JournalAdd
-            <p>tripId: {id}</p>
+            <p>tripId: {tripId}</p>
+            <p>journalId: {journalId}</p>
             <LocalizationProvider dateAdapter={AdapterMoment}>
                 <DatePicker
                     label="Date"

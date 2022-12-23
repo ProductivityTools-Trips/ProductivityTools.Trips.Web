@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import service from "../../services/apiService";
-import { useParams,Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import moment from 'moment';
 
 
@@ -11,7 +11,7 @@ function JournalList() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const r = await service.getJournal(params.id);
+            const r = await service.getJournalList(params.id);
             setJournals(r);
         }
         fetchData();
@@ -27,7 +27,7 @@ function JournalList() {
                             <td>{moment(x.date).format('YYYY.MM.DD')}</td>
                             <td><span className="wrap">{x.notes}</span></td>
                             <td>
-                                <Link to={"/JournalEdit/?tripId=" + params.id} > Edit</Link>
+                                <Link to={"/JournalEdit/?tripId=" + params.id + "&journalId=" + x.journalId} > Edit</Link>
                             </td>
                         </tr>
                     )
