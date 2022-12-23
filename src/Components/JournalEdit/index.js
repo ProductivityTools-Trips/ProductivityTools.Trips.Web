@@ -25,7 +25,6 @@ function JournalEdit() {
             console.log(data);
             setjournal(data);
         }
-        debugger;
         if (journalId!=undefined)
         {
             getJournal();
@@ -78,7 +77,7 @@ function JournalEdit() {
                     renderInput={(params) => <TextField {...params} />}
                 />
             </LocalizationProvider>
-            <div><TextField label="journal" multiline value={journal.notes} onChange={journalChange} fullWidth></TextField></div>
+            <div><TextField label="journal" multiline value={journal.notes ||''} onChange={journalChange} fullWidth></TextField></div>
             <Button variant="contained" onClick={saveAndClose}>Save & Close</Button>
             <Button variant="outlined" onClick={save}>Save</Button>
             <Button variant="outlined" onClick={close}>Close</Button>
