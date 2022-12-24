@@ -17,7 +17,7 @@ function JournalEdit() {
     const journalId = parseInt(searchParams.get("journalId"));
 
 
-    const [journal, setjournal] = useState({ tripId: tripId, journalId: journalId, date: moment() });
+    const [journal, setjournal] = useState({ tripId: tripId, date: moment() });
 
     useEffect(()=>{
         const getJournal=async ()=>{
@@ -25,7 +25,7 @@ function JournalEdit() {
             console.log(data);
             setjournal(data);
         }
-        if (journalId!=undefined)
+        if (isNaN(journalId)==false)
         {
             getJournal();
         }
