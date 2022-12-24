@@ -3,7 +3,6 @@ import service from '../../services/apiService'
 import { useParams, Link } from "react-router-dom";
 import { CacheContext } from '../../session/CacheContext';
 import moment from 'moment';
-import Chart from './chart';
 import BarChart from './barchart';
 
 function ExpenseList() {
@@ -59,8 +58,8 @@ function ExpenseList() {
                         <th>Expensed</th>
                         <th>Value in Pln</th>
                         <th>Expensed din Pln</th>
-                        <th>Day value in Pln</th>
-                        <th>Day expensed in Pln</th>
+                        {/* <th>Day value in Pln</th>
+                        <th>Day expensed in Pln</th> */}
                         <th>Chart</th>
                     </tr>
                 </thead>
@@ -77,8 +76,8 @@ function ExpenseList() {
                                 <td>{x.expensed}</td>
                                 <td>{(x.valuePln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.dayExpensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                {/* <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td>{(x.dayExpensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td> */}
                                 <td><input name="fsda" type="checkbox" checked={x.checked} onChange={(e) => markExpenseForChart(x.expenseId, e)}></input></td>
                                 <td><Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link></td>
                             </tr>
@@ -87,7 +86,6 @@ function ExpenseList() {
                 </tbody>
             </table>
             <BarChart expenses={expenses}></BarChart>
-            <Chart expenses={expenses}></Chart>
         </div>
 
     )
