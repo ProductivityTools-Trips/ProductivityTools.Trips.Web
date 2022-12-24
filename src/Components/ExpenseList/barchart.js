@@ -99,7 +99,8 @@ function BarChart(props) {
     return (
         <div>
             <span>BarChart - Daily Value in Pln</span>
-            <div style={{ width: '1300px', border: '1px solid black' }}>
+            {/* <div style={{ width: '1300px', border: '1px solid black' }}> */}
+            <div style={{ border: '1px solid black' }}>
                 <div style={{ width: "200px", border: "1px solid red", float: "left" }}>
                     <DiscreteColorLegend
                         width={180}
