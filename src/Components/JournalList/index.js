@@ -12,6 +12,7 @@ function JournalList() {
     useEffect(() => {
         const fetchData = async () => {
             const r = await service.getJournalList(params.id);
+            r.sort((x, y) => x.date < y.date ? 1 : -1)
             setJournals(r);
         }
         fetchData();
@@ -19,7 +20,13 @@ function JournalList() {
 
 
     return (
-        <table>
+        <table className="green">
+             <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
             <tbody>
                 {journals.map(x => {
                     return (

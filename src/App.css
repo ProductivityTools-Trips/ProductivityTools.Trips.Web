@@ -12,11 +12,14 @@
 
 
 
+table.right{
+  text-align: right;
+}
 
 
 table.green {
   background-color: #EEF1ED;
-  text-align: right;
+  /* text-align: right; */
   border-collapse: collapse;
 }
 table.green td, table.green th {

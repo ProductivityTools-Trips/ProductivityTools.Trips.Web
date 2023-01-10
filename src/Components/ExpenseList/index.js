@@ -46,7 +46,7 @@ function ExpenseList() {
             <div>
                 {cache && cache.currencies && cache.currencies[0].name}
             </div>
-            <table className="green">
+            <table className="green right">
                 <thead>
                     <tr>
                         <th>Expense Id</th>
