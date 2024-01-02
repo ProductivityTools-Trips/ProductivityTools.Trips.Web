@@ -56,6 +56,7 @@ function ExpenseList() {
                         <th>Value</th>
                         <th>Currency</th>
                         <th>Expensed</th>
+                        <th>FamilyCost</th>
                         <th>Value in Pln</th>
                         <th>Expensed din Pln</th>
                         {/* <th>Day value in Pln</th>
@@ -74,6 +75,7 @@ function ExpenseList() {
                                 <td>{x.value}</td>
                                 <td>{x.currencyName}</td>
                                 <td>{x.expensed}</td>
+                                <td>{x.familyCost}</td>
                                 <td>{(x.valuePln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 {/* <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
