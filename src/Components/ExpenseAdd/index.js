@@ -97,6 +97,7 @@ function ExpenseAdd() {
             <p>Name:<input type='edit' name='name' value={expense && expense.name || ""} onChange={handleChange}></input></p>
             <p>Value:<input type='edit' name='value' value={expense && expense.value || ""} onChange={handleChange}></input></p>
             <p>Expensed: :<input type='edit' name='expensed' value={expense && expense.expensed || ""} onChange={handleChange}></input></p>
+            <p>FamilyCost: <input type='edit' name='familyCost' value={expense && expense.familyCost || ""} onChange={handleChange}></input></p> 
             <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
             {<p>Currencies:
 

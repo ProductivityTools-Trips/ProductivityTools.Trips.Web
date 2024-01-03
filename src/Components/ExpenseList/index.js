@@ -57,6 +57,7 @@ function ExpenseList() {
                         <th>Currency</th>
                         <th>Expensed</th>
                         <th>FamilyCost</th>
+                        <th>FriendsDebit</th>
                         <th>Value in Pln</th>
                         <th>Expensed din Pln</th>
                         {/* <th>Day value in Pln</th>
@@ -76,6 +77,7 @@ function ExpenseList() {
                                 <td>{x.currencyName}</td>
                                 <td>{x.expensed}</td>
                                 <td>{x.familyCost}</td>
+                                <td>{x.friendsDebit}</td>
                                 <td>{(x.valuePln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 {/* <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
@@ -85,6 +87,23 @@ function ExpenseList() {
                             </tr>
                         )
                     })}
+
+                    <tr>
+                    <th>Expense Id</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Value</th>
+                        <th>Currency</th>
+                        <th>Expensed</th>
+                        <th>FamilyCost</th>
+                        <th>{expenses?.reduce((a,v) =>  a = a + v.friendsDebit , 0 )}</th>
+                        <th>Value in Pln</th>
+                        <th>Expensed din Pln</th>
+                        {/* <th>Day value in Pln</th>
+                        <th>Day expensed in Pln</th> */}
+                        <th>Chart</th>
+                    </tr>
                 </tbody>
             </table>
             <BarChart expenses={expenses}></BarChart>

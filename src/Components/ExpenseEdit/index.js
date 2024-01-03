@@ -75,7 +75,10 @@ function ExpenseEdit() {
             <div><TextField label="Value" name='value' type='number' value={(expense && expense.value)|| ""} onChange={handleChange} fullWidth></TextField></div>
             <div><TextField label="Expensed" name='expensed' type='number' value={(expense && expense.expensed) || ""} onChange={handleChange} fullWidth></TextField></div>
             <div><TextField label="FamilyCost" name='familyCost' type='number' value={(expense && expense.familyCost) || ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="FriendsDebit" name='friendsDebit' type='number' value={(expense && expense.friendsDebit) || ""} onChange={handleChange} fullWidth></TextField></div>
+
             <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
+            
             {<p>Currencies:
 
                 {cache && cache.currencies && cache.currencies.map(x => {
