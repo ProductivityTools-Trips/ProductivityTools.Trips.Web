@@ -54,12 +54,14 @@ function ExpenseList() {
                         <th>Date</th>
                         <th>Category</th>
                         <th>Value</th>
-                        <th>Currency</th>
                         <th>Expensed</th>
                         <th>FamilyCost</th>
                         <th>FriendsDebit</th>
+                        <th>Currency</th>
+                        
                         <th>Value in Pln</th>
-                        <th>Expensed din Pln</th>
+                        <th>Expensed in Pln</th>
+                        <th>FamilyCost in Pln</th>
                         {/* <th>Day value in Pln</th>
                         <th>Day expensed in Pln</th> */}
                         <th>Chart</th>
@@ -74,12 +76,13 @@ function ExpenseList() {
                                 <td>{moment(x.date).format('YYYY.MM.DD')}</td>
                                 <td>{x.categoryName}</td>
                                 <td>{x.value}</td>
-                                <td>{x.currencyName}</td>
                                 <td>{x.expensed}</td>
                                 <td>{x.familyCost}</td>
                                 <td>{x.friendsDebit}</td>
+                                <td>{x.currencyName}</td>
                                 <td>{(x.valuePln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                <td></td>
                                 {/* <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.dayExpensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td> */}
                                 <td><input name="fsda" type="checkbox" checked={x.checked} onChange={(e) => markExpenseForChart(x.expenseId, e)}></input></td>
@@ -94,12 +97,13 @@ function ExpenseList() {
                         <th>Date</th>
                         <th>Category</th>
                         <th>Value</th>
+                        <th>{expenses?.reduce((a,v) =>  a = a + v.expensed , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
+                        <th>{expenses?.reduce((a,v) =>  a = a + v.familyCost , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
+                        <th>{expenses?.reduce((a,v) =>  a = a + v.friendsDebit , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
                         <th>Currency</th>
-                        <th>Expensed</th>
-                        <th>FamilyCost</th>
-                        <th>{expenses?.reduce((a,v) =>  a = a + v.friendsDebit , 0 )}</th>
-                        <th>Value in Pln</th>
-                        <th>Expensed din Pln</th>
+                        <th>{expenses?.reduce((a,v) =>  a = a + v.valuePln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
+                        <th>{expenses?.reduce((a,v) =>  a = a + v.expensedInPln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
+                        <th></th>
                         {/* <th>Day value in Pln</th>
                         <th>Day expensed in Pln</th> */}
                         <th>Chart</th>
