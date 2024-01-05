@@ -65,6 +65,17 @@ function ExpenseEdit() {
         }))
     }
 
+    const defaultValue=(expense, value)=>{
+        if (expense==undefined || value==undefined)
+        {
+            return ""
+        }
+        else
+        {
+            return value;
+        }
+    }
+
     return (
         <div>
             <p>Expense EditA</p>
@@ -72,10 +83,10 @@ function ExpenseEdit() {
             <p>{expense && expense.tripId}</p>
             <p>{expense && expense.name}</p>
             <div><TextField label="Name" name='name'  value={(expense && expense.name)|| ""} onChange={handleChange} fullWidth></TextField></div>
-            <div><TextField label="Value" name='value' type='number' value={(expense && expense.value)|| ""} onChange={handleChange} fullWidth></TextField></div>
-            <div><TextField label="Expensed" name='expensed' type='number' value={(expense && expense.expensed) || ""} onChange={handleChange} fullWidth></TextField></div>
-            <div><TextField label="FamilyCost" name='familyCost' type='number' value={(expense && expense.familyCost) || ""} onChange={handleChange} fullWidth></TextField></div>
-            <div><TextField label="FriendsDebit" name='friendsDebit' type='number' value={(expense && expense.friendsDebit) || ""} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="Value" name='value' type='number' value={defaultValue(expense,expense.value)} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="Expensed" name='expensed' type='number' value={defaultValue(expense,expense.expensed)} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="FamilyCost" name='familyCost' type='number' value={defaultValue(expense,expense.familyCost)} onChange={handleChange} fullWidth></TextField></div>
+            <div><TextField label="FriendsDebit" name='friendsDebit' type='number' value={defaultValue(expense,expense.friendsDebit)} onChange={handleChange} fullWidth></TextField></div>
 
             <p>{cache && cache.currencies && cache.currencies.length > 0 && cache.currencies[0].name}</p>
             
