@@ -82,7 +82,7 @@ function ExpenseList() {
                                 <td>{x.currencyName}</td>
                                 <td>{(x.valuePln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td></td>
+                                <td>{(x.familyCostInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 {/* <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                 <td>{(x.dayExpensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td> */}
                                 <td><input name="fsda" type="checkbox" checked={x.checked} onChange={(e) => markExpenseForChart(x.expenseId, e)}></input></td>
@@ -103,7 +103,7 @@ function ExpenseList() {
                         <th>Currency</th>
                         <th>{expenses?.reduce((a,v) =>  a = a + v.valuePln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
                         <th>{expenses?.reduce((a,v) =>  a = a + v.expensedInPln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
-                        <th></th>
+                        <th>{expenses?.reduce((a,v) =>  a = a + v.familyCostInPln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
                         {/* <th>Day value in Pln</th>
                         <th>Day expensed in Pln</th> */}
                         <th>Chart</th>
