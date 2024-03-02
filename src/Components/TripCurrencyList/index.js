@@ -27,15 +27,26 @@ function TripCurrency() {
         navigate('/tripcurrency?tripId='+params.id, { replace: true })
     }
 
+    const deleteCurrency=()=>{
+
+    }
+
     return (
         <div>
             <p>Trip currencies:</p>
             <table>
+                <tr>
+                    <th>TripCurrencyId</th>
+                    <th>Currency Name</th>
+                    <th>Conversion rate</th>
+                </tr>
                 {tripCurrency.map(x => {
                     return (
                         <tr>
+                            <td>{x.tripCurrencyId}</td>
                             <td>{x.currencyName}</td>
                             <td>{x.value}</td>
+                            <td><button onClick={deleteCurrency}>Delete</button></td>
                         </tr>
                     )
                 })}

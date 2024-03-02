@@ -52,7 +52,8 @@ function TripCurrency() {
                     )
                 })}
             </RadioGroup>
-            <p><TextField label="Value" type="number" onChange={handleChange} value={tripCurrency.value || 0}></TextField></p>
+            <p><TextField label="Value" type="number" onChange={handleChange} value={tripCurrency.value || 0}></TextField> 
+            </p>
             <Button onClick={save} variant="contained">Save</Button>
         </div >
     )
