@@ -46,6 +46,11 @@ async function saveTripCurrency(tripCurrency) {
     return response.data;
 }
 
+async function deleteTripCurrency(tripCurrencyId){
+    const response = await axios.get(`${config.PATH_BASE}/Currency/DeleteTripCurrency?tripCurrencyId=${tripCurrencyId}`)
+    return response.data;
+}
+
 async function getExpenses(id) {
     const response = await axios.get(`${config.PATH_BASE}/Expense/GetList?tripId=${id}`);
     return response.data
@@ -110,6 +115,7 @@ const service = {
     saveTrip,
     getTripCurrency,
     saveTripCurrency,
+    deleteTripCurrency,
     getExpenses,
     getExpenseFullView,
     getExpense,

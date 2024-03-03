@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import service from "../../services/apiService";
 
 import Button from '@mui/material/Button';
+import { setRef } from "@mui/material";
 
 
 
@@ -12,6 +13,7 @@ function TripCurrency() {
     const navigate = useNavigate();
 
     const [tripCurrency, setTripCurrency] = useState([]);
+    const [refreshPointer, setRefreshPointer] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,16 +21,17 @@ function TripCurrency() {
             setTripCurrency(r);
         }
         fetchData();
-    }, [])
+    }, [refreshPointer])
 
 
     const addCurrency = () => {
         console.log("add currency")
-        navigate('/tripcurrency?tripId='+params.id, { replace: true })
+        navigate('/tripcurrency?tripId=' + params.id, { replace: true })
     }
 
-    const deleteCurrency=()=>{
-
+    const deleteCurrency = async (tripCurrencyId) => {
+        const r = await service.deleteTripCurrency(tripCurrencyId)
+        setRefreshPointer(refreshPointer + 1)
     }
 
     return (
@@ -46,7 +49,7 @@ function TripCurrency() {
                             <td>{x.tripCurrencyId}</td>
                             <td>{x.currencyName}</td>
                             <td>{x.value}</td>
-                            <td><button onClick={deleteCurrency}>Delete</button></td>
+                            <td><button onClick={()=>deleteCurrency(x.tripCurrencyId)}>Delete</button></td>
                         </tr>
                     )
                 })}
