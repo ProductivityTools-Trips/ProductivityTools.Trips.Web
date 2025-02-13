@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from "react-router-dom";
 import ExpenseList from "../ExpenseList";
 import JournalList from "../JournalList";
+import TripDescription from "../TripDescription"
 import service from '../../services/apiService'
 
 
@@ -24,7 +25,8 @@ function TripDetail() {
             <Link to={"/tripedit/" + params.id}>Edit this trip</Link>
             <Link to={"/expenseadd/?tripId=" + params.id}>AddExpense</Link>
             <Link to={"/journaladd/?tripId=" + params.id}>Add Notes</Link>
-            <p>TripDetail</p>
+            <p>TripDetail1</p>
+            <TripDescription></TripDescription>
             {/* <p>{trip.description}</p> */}
             <ExpenseList></ExpenseList>
             <JournalList></JournalList>
