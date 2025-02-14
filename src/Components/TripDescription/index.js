@@ -17,8 +17,10 @@ function TripDescription() {
   
   return(
     <div>
-        <span>trip description:</span>
-        <span>{trip && trip.description}</span>
+        <p>trip description:</p>
+        <p>{trip && trip.description}</p>
+        <p>trip learnings:</p>
+        <p>{trip && trip.learnings}</p>
     </div>
   )
 }
