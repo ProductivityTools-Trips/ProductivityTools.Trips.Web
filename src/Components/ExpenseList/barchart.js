@@ -51,7 +51,7 @@ function BarChart(props) {
         // const addExpense = (expense) => {
         //     for (var i = 0; i < pieValues.length; i++) {
         //         if (pieValues[i].id == expense.categoryName) {
-                    
+
         //         }
         //     }
         // }
@@ -85,27 +85,7 @@ function BarChart(props) {
 
                 for (var i = 0; i < pieValues.length; i++) {
                     if (pieValues[i].id == expense.categoryName) {
-                        pieValues[i].value+=expense.expensedInPln;
-
-                        // let updated = false;
-                        // pieValues[i].dataPoints.forEach(e => {
-                        //     if (e.x == (new Date(expense.date).getDate())) {
-                        //         if (pieValues[i].category == expense.categoryName) {
-                        //             e.y = e.y + expense.valuePln;
-                        //             updated = true;
-                        //         }
-                        //     }
-                        // })
-
-                        // if (updated == false) {
-                        //     if (pieValues[i].category == expense.categoryName) {
-                        //         pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: expense.value }]
-                        //     }
-                        //     else {
-                        //         pieValues[i].dataPoints = [...pieValues[i].dataPoints, { x: (new Date(expense.date)).getDate(), y: 0 }]
-
-                        //     }
-                        // }
+                        pieValues[i].value += expense.expensedInPln;
                     }
                 }
             }
@@ -120,11 +100,34 @@ function BarChart(props) {
         <div>
             <span>BarChart - Daily Value in Pln</span>
             <div>
-                <PieChart
+                <table className="green right">
+                    <thead>
+                        <tr>
+                            <th>Expense Id</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pieData && pieData.sort((a, b) => a.value > b.value ? -1 : 1).map(x => {
+                            return (
+                                <tr key={x.id}>
+                                    <td>{x.id}</td>
+                                    <td>{x.value && (x.value).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                </tr>
+                            )
+                        })}
+
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                {/* <PieChart
                     series={[
                         {
                             data: [
-                                { id: 0, value: 10, label: 'series A' },
+                                { id: 0, value: 10, label: 'series A',  arcLabel: (item) => `${item.value}%`, },
                                 { id: 1, value: 15, label: 'series B' },
                                 { id: 2, value: 20, label: 'series C' },
                             ],
@@ -132,7 +135,7 @@ function BarChart(props) {
                     ]}
                     width={400}
                     height={200}
-                />
+                /> */}
                 <PieChart
                     series={[
                         {
