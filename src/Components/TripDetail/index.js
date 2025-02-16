@@ -30,6 +30,7 @@ function TripDetail() {
             {/* <p>{trip.description}</p> */}
             <ExpenseList></ExpenseList>
             <JournalList></JournalList>
+
         </div>)
 }
 
