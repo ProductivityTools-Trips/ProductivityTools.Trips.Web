@@ -20,27 +20,31 @@ function JournalList() {
 
 
     return (
-        <table className="green">
-             <thead>
+        <div>
+
+            <div>Journal:</div>
+            <table className="green">
+                <thead>
                     <tr>
                         <th>Date</th>
                         <th>Description</th>
                     </tr>
                 </thead>
-            <tbody>
-                {journals.map(x => {
-                    return (
-                        <tr key={x.journalId}>
-                            <td>{moment(x.date).format('YYYY.MM.DD')}</td>
-                            <td><span className="wrap">{x.notes}</span></td>
-                            <td>
-                                <Link to={"/JournalEdit/?tripId=" + params.id + "&journalId=" + x.journalId} > Edit</Link>
-                            </td>
-                        </tr>
-                    )
-                })}
-            </tbody>
-        </table>
+                <tbody>
+                    {journals.map(x => {
+                        return (
+                            <tr key={x.journalId}>
+                                <td>{moment(x.date).format('YYYY.MM.DD')}</td>
+                                <td><span className="wrap">{x.notes}</span></td>
+                                <td>
+                                    <Link to={"/JournalEdit/?tripId=" + params.id + "&journalId=" + x.journalId} > Edit</Link>
+                                </td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+        </div>
     )
 }
 

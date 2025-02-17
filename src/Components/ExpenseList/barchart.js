@@ -12,55 +12,13 @@ function BarChart(props) {
 
     const [pieData, setPieData] = useState(
         [
-            {
-                'category': 'Empty',
-                'dataPoints':
-                    [
-                        { x: 'a', y: 1 },
-                        // { x: 2, y: 1 }
-                    ]
-            },
 
-            // {
-            //     'category': 'Sleep',
-            //     'dataPoints':
-            //         [
-            //             { x: 1, y: 1 },
-            //              { x: 2, y: 1 }
-            //         ]
-            // },
-
-            // {
-            //     'category': 'Fun',
-            //     'dataPoints':
-            //         [
-            //             { x: 1, y: 1 },
-            //             { x: 2, y: 1 },
-            //             { x: 3, y: 1 },
-
-            //         ]
-            // }
         ]
     )
     console.log("piedata");
     console.log(pieData)
 
     useEffect(() => {
-
-
-        // const addExpense = (expense) => {
-        //     for (var i = 0; i < pieValues.length; i++) {
-        //         if (pieValues[i].id == expense.categoryName) {
-
-        //         }
-        //     }
-        // }
-
-        // props && props.expenses && props.expenses.forEach(expense => {
-        //     console.log(expense);
-
-        // })
-
         const addCategories = (pieValues) => {
             let categories = []
             props && props.expenses && props.expenses.forEach(expense => {
@@ -98,7 +56,7 @@ function BarChart(props) {
 
     return (
         <div>
-            <span>BarChart - Daily Value in Pln</span>
+            <hr />
             <div>
                 <table className="green right">
                     <thead>

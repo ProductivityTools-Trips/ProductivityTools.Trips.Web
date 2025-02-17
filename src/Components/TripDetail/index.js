@@ -25,9 +25,7 @@ function TripDetail() {
             <Link to={"/tripedit/" + params.id}>Edit this trip</Link>
             <Link to={"/expenseadd/?tripId=" + params.id}>AddExpense</Link>
             <Link to={"/journaladd/?tripId=" + params.id}>Add Notes</Link>
-            <p>TripDetail1</p>
             <TripDescription></TripDescription>
-            {/* <p>{trip.description}</p> */}
             <ExpenseList></ExpenseList>
             <JournalList></JournalList>
 
