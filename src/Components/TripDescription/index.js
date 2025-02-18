@@ -20,8 +20,8 @@ function TripDescription() {
   return (
     <div>
       <div><p><b>{trip && trip.name || ""}</b></p></div>
-      <div><TextField label="Trip description" margin="dense" type="text" disabled multiline name="description" value={trip && trip.description || ''}></TextField></div>
-      <div><TextField label="Trip learnings" margin="dense" type="text" disabled multiline name="learnings" value={trip && trip.learnings || ''}></TextField></div>
+      <div><TextField label="Trip description" margin="dense" fullWidth type="text" disabled multiline name="description" value={trip && trip.description || ''}></TextField></div>
+      <div><TextField label="Trip learnings" margin="dense" fullWidth type="text" disabled multiline name="learnings" value={trip && trip.learnings || ''}></TextField></div>
     </div>
   )
 }

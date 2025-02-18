@@ -49,7 +49,9 @@ function TripEdit(props) {
     const save = async () => {
         if (props.mode == 'edit') {
             await service.saveTrip(trip);
+            navigate("/tripdetail/"+params.id, { replace: true })
         }
+
         if (props.mode == 'add') {
             await service.addTrip(trip);
             navigate('/', { replace: true })
@@ -108,10 +110,10 @@ function TripEdit(props) {
                 />
                 </p>
             </LocalizationProvider>
-            <div><TextField label="Days" type="number" name="days" onChange={handleChange} value={trip && trip.days || 0}></TextField></div>
-            <div><TextField label="Nights" type="number" name="nights" onChange={handleChange} value={trip && trip.nights || 0}></TextField></div>
-            <div><TextField label="Description" type="text" multiline fullWidth name="description" onChange={handleChange} value={trip && trip.description || ''}></TextField></div>
-            <div><TextField label="Learnings" type="text" multiline fullWidth name="learnings" onChange={handleChange} value={trip && trip.learnings || ''}></TextField></div>
+            <div><TextField label="Days" type="number" name="days" onChange={handleChange} value={trip && trip.days || 0 } margin="dense"></TextField></div>
+            <div><TextField label="Nights" type="number" name="nights" onChange={handleChange} value={trip && trip.nights || 0} margin="dense"></TextField></div>
+            <div><TextField label="Description" type="text" multiline fullWidth name="description" onChange={handleChange} value={trip && trip.description || ''} margin="dense"></TextField></div>
+            <div><TextField label="Learnings" type="text" multiline fullWidth name="learnings" onChange={handleChange} value={trip && trip.learnings || ''} margin="dense"></TextField></div>
 
             <Button onClick={save} variant="contained">Save</Button>
             
