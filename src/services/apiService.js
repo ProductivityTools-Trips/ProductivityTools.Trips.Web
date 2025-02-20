@@ -1,10 +1,18 @@
 import axios from 'axios'
 import { config } from '../config.js'
+import * as wrapper from './apiServiceWrappers.js'
 
 
 async function getDate() {
-    const response = await axios.get(`${config.PATH_BASE}/Trip/Date`)
-    return response.data;
+
+    let call = async (header) => {
+        const response = await axios.get(`${config.PATH_BASE}/Trip/Date`)
+        return response.data;
+    }
+
+    var result=wrapper.invokeCallWithToast(call, "DateTime", "DateTime end")
+    return result;
+
 }
 
 async function addTrip(trip) {
@@ -46,7 +54,7 @@ async function saveTripCurrency(tripCurrency) {
     return response.data;
 }
 
-async function deleteTripCurrency(tripCurrencyId){
+async function deleteTripCurrency(tripCurrencyId) {
     const response = await axios.get(`${config.PATH_BASE}/Currency/DeleteTripCurrency?tripCurrencyId=${tripCurrencyId}`)
     return response.data;
 }
@@ -70,8 +78,8 @@ async function addExpense(expense) {
     const response = await axios.post(`${config.PATH_BASE}/Expense/Add`, expense)
 }
 
-async function deleteExpense(expenseId){
-    const response=await axios.delete(`${config.PATH_BASE}/Expense/Delete?expenseId=${expenseId}`,)
+async function deleteExpense(expenseId) {
+    const response = await axios.delete(`${config.PATH_BASE}/Expense/Delete?expenseId=${expenseId}`,)
     return response;
 }
 
@@ -86,13 +94,13 @@ async function getCategoryDictionary() {
     return response.data;
 }
 
-async function getJournal(journalId){
-    const response=await axios.get(`${config.PATH_BASE}/Journal/Get?journalId=${journalId}`)
+async function getJournal(journalId) {
+    const response = await axios.get(`${config.PATH_BASE}/Journal/Get?journalId=${journalId}`)
     return response.data;
 }
 
-async function getJournalList(tripId){
-    const response=await axios.get(`${config.PATH_BASE}/Journal/GetForTrip?tripId=${tripId}`)
+async function getJournalList(tripId) {
+    const response = await axios.get(`${config.PATH_BASE}/Journal/GetForTrip?tripId=${tripId}`)
     return response.data;
 }
 
