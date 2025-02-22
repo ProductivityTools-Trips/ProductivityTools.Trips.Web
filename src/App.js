@@ -10,6 +10,7 @@ import ExpenseAdd from './Components/ExpenseAdd';
 import TripCurrency from './Components/TripCurrency';
 import JournalEdit from './Components/JournalEdit';
 import { ToastContainer } from "react-toastify";
+import Login from "./session/login"
 
 import { CacheContext, CacheProvider } from './session/CacheContext';
 
@@ -20,6 +21,7 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Routes>
+            <Route path="/Login" element={<Login />} />
             <Route path='/' element={<Home />}></Route>
             <Route path='addtrip/' element={<TripEdit mode='add' />}></Route>
             <Route path='tripedit/:id' element={<TripEdit mode='edit' />}></Route>
