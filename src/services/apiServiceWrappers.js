@@ -2,17 +2,19 @@
 import { toast } from "react-toastify";
 
 async function invokeCall(call) {
-        const response =await call(null);
+        let token = localStorage.getItem("token");
+        debugger;
+        const header = { headers: { Authorization: `Bearer ${token}` } };
+        const response =await call(header);
         return response;
 }
 
 export async function invokeCallWithToast(call, pendingMessage, successMessage) {
-    return toast.promise(call, {
+    return toast.promise(invokeCall(call), {
         pending: pendingMessage ? pendingMessage : "Missing pending message",
         success: successMessage ? successMessage : "Missing sucesss message",
         error: {
             render({ data }) {
-                debugger;
                 console.log("invokeCallwithtost", data);
                 return (
                     <p>

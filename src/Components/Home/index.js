@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import TripList from '../TripList'
 import service from '../../services/apiService'
 import { useNavigate } from 'react-router-dom';
+import { auth, logout } from "../../session/firebase";
+
 
 
 function Home() {
@@ -21,11 +23,13 @@ function Home() {
         navigate("/Login")
     }
 
+
     return (
         <div>
             <p>{date}</p>
             Hello
             <button onClick={login}>Login</button>
+            <button onClick={logout}>Logout</button>
             <div>
                 <TripList />
             </div>

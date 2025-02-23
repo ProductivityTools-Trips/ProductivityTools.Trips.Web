@@ -19,18 +19,16 @@ const firebaseConfig = {
   };
   
   // Initialize Firebase
-  debugger;
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
     try {
-        debugger;
         const res = await signInWithPopup(auth, googleProvider);
         console.log(res);
         localStorage.setItem("token", res.user.accessToken);     
-        
+        debugger;
         const user = auth.currentUser;
         const token=await user.getIdToken(true);
         //apiService.getCookie(token);

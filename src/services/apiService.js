@@ -27,9 +27,7 @@ async function getTrips() {
 
 async function getTripsFullView() {
     let call = async (header) => {
-
-
-        const response = await axios.get(`${config.PATH_BASE}/Trip/FullView`)
+        const response = await axios.get(`${config.PATH_BASE}/Trip/FullView`, header)
         return response.data;
     }
     var result = wrapper.invokeCallWithToast(call, "getTripsFullView", "getTripsFullView end")
