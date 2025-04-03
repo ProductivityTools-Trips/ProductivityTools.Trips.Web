@@ -6,14 +6,38 @@ import * as wrapper from './apiServiceWrappers.js'
 async function getDate() {
 
     let call = async (header) => {
-        const response = await axios.get(`${config.PATH_BASE}/Trip/Date`)
+        const response = await axios.get(`${config.PATH_BASE}/Debug/Date`)
         return response.data;
     }
 
     var result = wrapper.invokeCallWithToast(call, "DateTime", "DateTime end")
     return result;
+}
+
+async function getServerName() {
+
+    let call = async (header) => {
+        const response = await axios.get(`${config.PATH_BASE}/Debug/ServerName`)
+        return response.data;
+    }
+
+    var result = wrapper.invokeCallWithToast(call, "ServerName", "ServerName end")
+    return result;
 
 }
+
+async function getAppName() {
+
+    let call = async (header) => {
+        const response = await axios.get(`${config.PATH_BASE}/Debug/AppName`)
+        return response.data;
+    }
+
+    var result = wrapper.invokeCallWithToast(call, "AppName", "AppName end")
+    return result;
+
+}
+
 
 async function addTrip(trip) {
     const response = await axios.post(`${config.PATH_BASE}/Trip/Add`, trip)
@@ -120,6 +144,8 @@ async function updateJournal(journal) {
 
 const service = {
     getDate,
+    getServerName,
+    getAppName,
     addTrip,
     getTrips,
     getTrip,
@@ -139,7 +165,7 @@ const service = {
     getJournal,
     getJournalList,
     addJournal,
-    updateJournal
+    updateJournal,
 }
 
 export default service;
