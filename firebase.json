@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "pt-trips",
     "public": "build",
     "ignore": [
       "firebase.json",
