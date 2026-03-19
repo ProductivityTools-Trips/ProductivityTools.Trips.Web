@@ -10,27 +10,27 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBekUemIjPT6O1lU7mBskQcrmfVNSvLbjE",
-    authDomain: "pttripsprod.firebaseapp.com",
-    projectId: "pttripsprod",
-    storageBucket: "pttripsprod.firebasestorage.app",
-    messagingSenderId: "635068599677",
-    appId: "1:635068599677:web:b9f4216754e40804a49014"
-  };
-  
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    apiKey: "AIzaSyBxY4oT4SZd5r-nZiM1eFFnUCcC3UxgYr4",
+    authDomain: "ptprojectsweb.firebaseapp.com",
+    projectId: "ptprojectsweb",
+    storageBucket: "ptprojectsweb.firebasestorage.app",
+    messagingSenderId: "93484780890",
+    appId: "1:93484780890:web:78d2fc686d639c789ff763"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, googleProvider);
         console.log(res);
-        localStorage.setItem("token", res.user.accessToken);     
+        localStorage.setItem("token", res.user.accessToken);
         debugger;
         const user = auth.currentUser;
-        const token=await user.getIdToken(true);
+        const token = await user.getIdToken(true);
         //apiService.getCookie(token);
 
         return res.user;
