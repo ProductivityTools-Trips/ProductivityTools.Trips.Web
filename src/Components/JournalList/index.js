@@ -1,51 +1,50 @@
-import { useEffect, useState } from "react";
-import service from "../../services/apiService";
-import { useParams, Link } from 'react-router-dom'
-import moment from 'moment';
-
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import service from '../../services/apiService'
+import { fmtDate } from '../../utils/format'
 
 function JournalList() {
-
-    let params = useParams();
-    const [journals, setJournals] = useState([]);
+    const { id } = useParams()
+    const [journals, setJournals] = useState(null)
 
     useEffect(() => {
-        const fetchData = async () => {
-            const r = await service.getJournalList(params.id);
-            r.sort((x, y) => x.date < y.date ? 1 : -1)
-            setJournals(r);
-        }
-        fetchData();
-    }, [])
-
+        service.getJournalList(id).then(r => setJournals([...r].sort((x, y) => (x.date < y.date ? 1 : -1))))
+    }, [id])
 
     return (
-        <div>
+        <div className="section">
+            <div className="section__head">
+                <h2 className="section__title">Journal</h2>
+                <span className="section__meta">{journals?.length ?? 0} entries</span>
+            </div>
 
-            <div>Journal:</div>
-            <table className="green">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {journals.map(x => {
-                        return (
+            <div className="card">
+                <table className="tbl">
+                    <thead>
+                        <tr>
+                            <th style={{ width: 160 }}>Date</th>
+                            <th>Notes</th>
+                            <th />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {journals?.map(x => (
                             <tr key={x.journalId}>
-                                <td>{moment(x.date).format('YYYY.MM.DD')}</td>
-                                <td><span className="wrap">{x.notes}</span></td>
-                                <td>
-                                    <Link to={"/JournalEdit/?tripId=" + params.id + "&journalId=" + x.journalId} > Edit</Link>
+                                <td className="tbl__nowrap tbl__strong" style={{ verticalAlign: 'top' }}>{fmtDate(x.date)}</td>
+                                <td className="tbl__wrap">{x.notes}</td>
+                                <td className="tbl__num" style={{ verticalAlign: 'top' }}>
+                                    <Link className="tbl__link" to={`/JournalEdit/?tripId=${id}&journalId=${x.journalId}`}>Edit</Link>
                                 </td>
                             </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
+                        ))}
+                        {journals && journals.length === 0 && (
+                            <tr><td colSpan={3} className="tbl__empty">No notes yet</td></tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }
 
-export default JournalList;
+export default JournalList

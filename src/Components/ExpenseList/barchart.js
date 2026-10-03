@@ -1,111 +1,70 @@
-import { executeInTheNextEventLoopTick } from '@mui/x-date-pickers/internals';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { PieChart } from '@mui/x-charts/PieChart';
+import { useMemo } from 'react'
+import { PieChart } from '@mui/x-charts/PieChart'
+import { fmtMoney } from '../../utils/format'
 
+/**
+ * Expensed-in-PLN breakdown per category for the expenses flagged `checked`.
+ * (Name kept for backwards compatibility – it renders a pie, not a bar chart.)
+ */
+function BarChart({ expenses }) {
+    const data = useMemo(() => {
+        const byCat = new Map()
+        expenses?.forEach(e => {
+            if (!e.checked) return
+            byCat.set(e.categoryName, (byCat.get(e.categoryName) || 0) + (e.expensedInPln || 0))
+        })
+        return [...byCat.entries()]
+            .map(([id, value]) => ({ id, label: id, value }))
+            .sort((a, b) => b.value - a.value)
+    }, [expenses])
 
-function BarChart(props) {
+    const total = data.reduce((s, d) => s + d.value, 0)
 
-    // const [pieData, setPieData] = useState({ 'food': [{ x: 2, y: 4 }, { x: 3, y: 6 }],
-    // 'sleep': [{ x: 2, y: 4 }, { x: 3, y: 6 }] });
-
-
-    const [pieData, setPieData] = useState(
-        [
-
-        ]
-    )
-    console.log("piedata");
-    console.log(pieData)
-
-    useEffect(() => {
-        const addCategories = (pieValues) => {
-            let categories = []
-            props && props.expenses && props.expenses.forEach(expense => {
-                if (expense.checked && categories.indexOf(expense.categoryName) == -1) {
-                    categories.push(expense.categoryName)
-                }
-            })
-
-            categories.forEach(category => {
-                let x = { 'id': category, dataPoints: [], value: 0, 'label': category }
-                pieValues = [...pieValues, x];
-            })
-            return pieValues;
-        }
-
-        let pieValues = [];// = pieData
-        pieValues = addCategories(pieValues);
-        debugger;
-        console.log(props.expenses && props.expenses);
-        props && props.expenses && props.expenses.forEach(expense => {
-            if (expense.checked) {
-
-                for (var i = 0; i < pieValues.length; i++) {
-                    if (pieValues[i].id == expense.categoryName) {
-                        pieValues[i].value += expense.expensedInPln;
-                    }
-                }
-            }
-        }
-        );
-        console.log(pieValues);
-        setPieData(pieValues);
-
-    }, [props.expenses])
+    if (!expenses?.length) return null
 
     return (
-        <div>
-            <hr />
-            <div>
-                <table className="green right">
-                    <thead>
-                        <tr>
-                            <th>Expense Id</th>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pieData && pieData.sort((a, b) => a.value > b.value ? -1 : 1).map(x => {
-                            return (
-                                <tr key={x.id}>
-                                    <td>{x.id}</td>
-                                    <td>{x.value && (x.value).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                </tr>
-                            )
-                        })}
-
-                        <tr>
-                        </tr>
-                    </tbody>
-                </table>
+        <div className="section">
+            <div className="section__head">
+                <h2 className="section__title">By category</h2>
+                <span className="section__meta">{fmtMoney(total)} PLN in selected expenses</span>
             </div>
-            <div>
-                {/* <PieChart
-                    series={[
-                        {
-                            data: [
-                                { id: 0, value: 10, label: 'series A',  arcLabel: (item) => `${item.value}%`, },
-                                { id: 1, value: 15, label: 'series B' },
-                                { id: 2, value: 20, label: 'series C' },
-                            ],
-                        },
-                    ]}
-                    width={400}
-                    height={200}
-                /> */}
-                <PieChart
-                    series={[
-                        {
-                            data: pieData
-                        },
-                    ]}
-                    width={400}
-                    height={200}
-                />
+
+            <div className="cols cols--2">
+                <div className="card">
+                    <table className="tbl tbl--dense">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th className="tbl__num">Expensed PLN</th>
+                                <th className="tbl__num">Share</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map(d => (
+                                <tr key={d.id}>
+                                    <td><span className="pill">{d.label}</span></td>
+                                    <td className="tbl__num">{fmtMoney(d.value)}</td>
+                                    <td className="tbl__num tbl__muted">{total ? Math.round(d.value / total * 100) : 0}%</td>
+                                </tr>
+                            ))}
+                            {data.length === 0 && (
+                                <tr><td colSpan={3} className="tbl__empty">Select expenses to see the breakdown</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="card card--pad" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <PieChart
+                        series={[{ data, innerRadius: 50, paddingAngle: 1, cornerRadius: 3 }]}
+                        width={320}
+                        height={240}
+                        slotProps={{ legend: { hidden: true } }}
+                    />
+                </div>
             </div>
         </div>
     )
 }
 
-export default BarChart;
+export default BarChart

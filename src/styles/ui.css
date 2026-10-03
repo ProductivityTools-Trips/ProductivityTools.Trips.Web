@@ -1,0 +1,237 @@
+/* ------------------------------------------------------------------
+   Shared UI primitives: page shell, cards, tables, pills, buttons.
+   Used by TripList and TripDetail (ExpenseList, JournalList, ...).
+   ------------------------------------------------------------------ */
+
+:root {
+  --accent: #2F6B4F;
+  --accent-hover: #275A42;
+  --accent-soft: #E6F0EA;
+  --surface: #FFFFFF;
+  --line: #E6E9E6;
+  --track: #DDE2DD;
+  --text: #1A1F1C;
+  --muted: #6B7470;
+  --chip: #EEF1ED;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(20,40,30,.06);
+}
+
+/* ---- page shell ---- */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  color: var(--text);
+  font-family: "Inter", "Roboto", system-ui, sans-serif;
+}
+.page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.page__back {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+}
+.page__back:hover { color: var(--accent); }
+.page__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.page__subtitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.page__actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* ---- sections ---- */
+.section { margin-top: 28px; }
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.section__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.section__meta { color: var(--muted); font-size: 13px; }
+
+/* ---- buttons & inputs ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .1s;
+}
+.btn:active { transform: translateY(1px); }
+.btn--primary { background: var(--accent); color: #fff; }
+.btn--primary:hover { background: var(--accent-hover); }
+.btn--ghost { background: var(--surface); color: var(--text); border-color: var(--line); }
+.btn--ghost:hover { border-color: #C9D0C9; background: #FAFBFA; }
+.btn--sm { height: 28px; padding: 0 10px; font-size: 13px; }
+
+.input {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.input--search {
+  padding-left: 34px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236B7470' stroke-width='2'><circle cx='7' cy='7' r='5'/><path d='M11 11l3.5 3.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: 11px center;
+}
+
+/* ---- card ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card--pad { padding: 20px 24px; }
+.card--scroll { overflow-x: auto; }
+
+/* ---- table ---- */
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.tbl th, .tbl td { padding: 14px 16px; text-align: left; vertical-align: middle; }
+.tbl th:first-child, .tbl td:first-child { padding-left: 24px; }
+.tbl th:last-child,  .tbl td:last-child  { padding-right: 24px; }
+.tbl--dense th, .tbl--dense td { padding: 10px 12px; font-size: 13.5px; }
+
+.tbl thead th {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  user-select: none;
+}
+.tbl__sort {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.tbl__sort:hover, .tbl__sort.is-active { color: var(--text); }
+.tbl__sort-icon { font-size: 10px; opacity: .55; }
+
+.tbl tbody tr { border-bottom: 1px solid var(--line); transition: background .12s; }
+.tbl tbody tr:last-child { border-bottom: 0; }
+.tbl tbody tr:hover { background: var(--accent-soft); }
+.tbl tbody tr.is-link { cursor: pointer; }
+
+.tbl tfoot td {
+  border-top: 2px solid var(--line);
+  background: #FAFBFA;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.tbl__strong { font-weight: 500; }
+.tbl__strong a { color: inherit; text-decoration: none; }
+.tbl__muted { color: var(--muted); }
+.tbl__nowrap { white-space: nowrap; }
+.tbl__num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.tbl__wrap { white-space: pre-line; line-height: 1.5; max-width: 70ch; }
+.tbl__link { color: var(--accent); text-decoration: none; font-weight: 500; font-size: 13px; }
+.tbl__link:hover { text-decoration: underline; }
+.tbl__empty { padding: 48px; text-align: center; color: var(--muted); }
+
+/* ---- pill ---- */
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+/* ---- progress ---- */
+.progress {
+  margin-top: 7px;
+  height: 7px;
+  width: 100%;
+  border-radius: 4px;
+  background: var(--track);
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  transition: width .3s ease, background-color .3s ease;
+}
+
+/* ---- checkbox ---- */
+.check {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ---- key/value text blocks (trip description) ---- */
+.kv { display: grid; gap: 18px; }
+.kv__label {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.kv__value { margin: 0; white-space: pre-line; line-height: 1.55; font-size: 14px; }
+.kv__value:empty::before { content: "—"; color: var(--muted); }
+
+/* ---- two-column layout ---- */
+.cols { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 960px) { .cols--2 { grid-template-columns: minmax(0, 1fr) 360px; } }
+
+@media (max-width: 720px) {
+  .hide-sm { display: none !important; }
+  .tbl th, .tbl td { padding: 12px 10px; }
+}

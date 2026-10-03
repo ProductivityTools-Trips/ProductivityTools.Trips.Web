@@ -1,118 +1,132 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import service from '../../services/apiService'
-import { useParams, Link } from "react-router-dom";
-import { CacheContext } from '../../session/CacheContext';
-import moment from 'moment';
-import BarChart from './barchart';
+import BarChart from './barchart'
+import { SortHeader, useSort } from '../Shared/Table'
+import { fmtDate, fmtMoney, sortBy } from '../../utils/format'
+
+const COLUMNS = [
+    { key: 'expenseName', label: 'Name' },
+    { key: 'date', label: 'Date' },
+    { key: 'categoryName', label: 'Category' },
+    { key: 'value', label: 'Value', numeric: true },
+    { key: 'expensed', label: 'Expensed', numeric: true },
+    { key: 'familyCost', label: 'Family', numeric: true },
+    { key: 'friendsDebit', label: 'Friends', numeric: true, className: 'hide-sm' },
+    { key: 'valuePln', label: 'Value PLN', numeric: true },
+    { key: 'expensedInPln', label: 'Expensed PLN', numeric: true },
+    { key: 'familyCostInPln', label: 'Family PLN', numeric: true, className: 'hide-sm' },
+    { key: 'checked', label: 'Chart', sortable: false },
+    { key: '_edit', label: '', sortable: false },
+]
+
+const SUM_KEYS = ['expensed', 'familyCost', 'friendsDebit', 'valuePln', 'expensedInPln', 'familyCostInPln']
 
 function ExpenseList() {
-
-    let params = useParams();
+    const { id } = useParams()
     const [expenses, setExpenses] = useState(null)
-    let cache = React.useContext(CacheContext);
+    const [sort, toggleSort] = useSort('date', 'desc', ['expenseName', 'categoryName'])
 
     useEffect(() => {
-        const fetchData = async () => {
-            const r = await service.getExpenseFullView(params.id);
-            r.map(x => {
-                x.checked = true;
-                return x;
-            })
-            setExpenses(r);
-        }
-        fetchData();
-    }, [])
+        service.getExpenseFullView(id).then(r => setExpenses(r.map(x => ({ ...x, checked: true }))))
+    }, [id])
 
-    console.log("cx");
-    console.log(cache);
+    const toggleChart = (expenseId) =>
+        setExpenses(prev => prev.map(x => x.expenseId === expenseId ? { ...x, checked: !x.checked } : x))
 
-    const markExpenseForChart = (id, event) => {
-        let newList = [...expenses]
-        for (var i = 0; i < newList.length; i++) {
-            if (newList[i].expenseId == id) {
-                newList[i].checked = !newList[i].checked;
-                console.log("checked chaned");
-            }
-        }
-        setExpenses(newList);
-        console.log("markExpenseForChart")
-        console.log(id);
-        console.log(event);
-    }
+    const toggleAll = (checked) => setExpenses(prev => prev.map(x => ({ ...x, checked })))
+
+    const visible = useMemo(() => expenses ? sortBy(expenses, sort.key, sort.dir) : null, [expenses, sort])
+
+    const totals = useMemo(() => {
+        const t = Object.fromEntries(SUM_KEYS.map(k => [k, 0]))
+        expenses?.forEach(x => SUM_KEYS.forEach(k => { t[k] += x[k] || 0 }))
+        return t
+    }, [expenses])
+
+    const allChecked = !!expenses?.length && expenses.every(x => x.checked)
 
     return (
-        <div>
-            {/* <div>
-                {cache && cache.currencies && cache.currencies[0].name}
-            </div> */}
-            <table className="green right">
-                <thead>
-                    <tr>
-                        <th>Expense Id</th>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Category</th>
-                        <th>Value</th>
-                        <th>Expensed</th>
-                        <th>FamilyCost</th>
-                        <th>FriendsDebit</th>
-                        <th>Currency</th>
-                        
-                        <th>Value in Pln</th>
-                        <th>Expensed in Pln</th>
-                        <th>FamilyCost in Pln</th>
-                        {/* <th>Day value in Pln</th>
-                        <th>Day expensed in Pln</th> */}
-                        <th>Chart</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {expenses && expenses.map(x => {
-                        return (
-                            <tr key={x.expenseId}>
-                                <td>{x.expenseId}</td>
-                                <td>{x.expenseName}</td>
-                                <td>{moment(x.date).format('YYYY.MM.DD')}</td>
-                                <td>{x.categoryName}</td>
-                                <td>{x.value}</td>
-                                <td>{x.expensed}</td>
-                                <td>{x.familyCost}</td>
-                                <td>{x.friendsDebit}</td>
-                                <td>{x.currencyName}</td>
-                                <td>{(x.valuePln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.expensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.familyCostInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                {/* <td>{(x.dayValueInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                                <td>{(x.dayExpensedInPln).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td> */}
-                                <td><input name="fsda" type="checkbox" checked={x.checked} onChange={(e) => markExpenseForChart(x.expenseId, e)}></input></td>
-                                <td><Link to={"/expenseedit/" + x.expenseId}>Edit expense</Link></td>
+        <>
+            <div className="section">
+                <div className="section__head">
+                    <h2 className="section__title">Expenses</h2>
+                    <span className="section__meta">
+                        {expenses?.length ?? 0} items · {fmtMoney(totals.expensedInPln)} PLN expensed
+                    </span>
+                </div>
+
+                <div className="card card--scroll">
+                    <table className="tbl tbl--dense">
+                        <thead>
+                            <tr>
+                                {COLUMNS.map(c => c.key === 'checked' ? (
+                                    <th key={c.key} title="Include in chart">
+                                        <input
+                                            type="checkbox"
+                                            className="check"
+                                            checked={allChecked}
+                                            onChange={e => toggleAll(e.target.checked)}
+                                        />
+                                    </th>
+                                ) : (
+                                    <SortHeader key={c.key} col={c} sort={sort} onSort={toggleSort} />
+                                ))}
                             </tr>
-                        )
-                    })}
+                        </thead>
+                        <tbody>
+                            {visible?.map(x => (
+                                <tr key={x.expenseId} title={`#${x.expenseId}`}>
+                                    <td className="tbl__strong">{x.expenseName}</td>
+                                    <td className="tbl__nowrap">{fmtDate(x.date)}</td>
+                                    <td><span className="pill">{x.categoryName}</span></td>
+                                    <td className="tbl__num">
+                                        {fmtMoney(x.value, 2)} <span className="tbl__muted">{x.currencyName}</span>
+                                    </td>
+                                    <td className="tbl__num">{fmtMoney(x.expensed, 2)}</td>
+                                    <td className="tbl__num">{fmtMoney(x.familyCost, 2)}</td>
+                                    <td className="tbl__num hide-sm">{fmtMoney(x.friendsDebit, 2)}</td>
+                                    <td className="tbl__num">{fmtMoney(x.valuePln)}</td>
+                                    <td className="tbl__num">{fmtMoney(x.expensedInPln)}</td>
+                                    <td className="tbl__num hide-sm">{fmtMoney(x.familyCostInPln)}</td>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            className="check"
+                                            checked={x.checked}
+                                            onChange={() => toggleChart(x.expenseId)}
+                                        />
+                                    </td>
+                                    <td className="tbl__num">
+                                        <Link className="tbl__link" to={`/expenseedit/${x.expenseId}`}>Edit</Link>
+                                    </td>
+                                </tr>
+                            ))}
+                            {visible && visible.length === 0 && (
+                                <tr><td colSpan={COLUMNS.length} className="tbl__empty">No expenses yet</td></tr>
+                            )}
+                        </tbody>
+                        {!!expenses?.length && (
+                            <tfoot>
+                                <tr>
+                                    <td colSpan={4}>Total</td>
+                                    <td className="tbl__num">{fmtMoney(totals.expensed, 2)}</td>
+                                    <td className="tbl__num">{fmtMoney(totals.familyCost, 2)}</td>
+                                    <td className="tbl__num hide-sm">{fmtMoney(totals.friendsDebit, 2)}</td>
+                                    <td className="tbl__num">{fmtMoney(totals.valuePln)}</td>
+                                    <td className="tbl__num">{fmtMoney(totals.expensedInPln)}</td>
+                                    <td className="tbl__num hide-sm">{fmtMoney(totals.familyCostInPln)}</td>
+                                    <td colSpan={2} />
+                                </tr>
+                            </tfoot>
+                        )}
+                    </table>
+                </div>
+            </div>
 
-                    <tr>
-                    <th>Expense Id</th>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Category</th>
-                        <th>Value</th>
-                        <th>{expenses?.reduce((a,v) =>  a = a + v.expensed , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
-                        <th>{expenses?.reduce((a,v) =>  a = a + v.familyCost , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
-                        <th>{expenses?.reduce((a,v) =>  a = a + v.friendsDebit , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
-                        <th>Currency</th>
-                        <th>{expenses?.reduce((a,v) =>  a = a + v.valuePln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
-                        <th>{expenses?.reduce((a,v) =>  a = a + v.expensedInPln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
-                        <th>{expenses?.reduce((a,v) =>  a = a + v.familyCostInPln , 0 ).toLocaleString(undefined, { maximumFractionDigits: 0 })}</th>
-                        {/* <th>Day value in Pln</th>
-                        <th>Day expensed in Pln</th> */}
-                        <th>Chart</th>
-                    </tr>
-                </tbody>
-            </table>
-            <BarChart expenses={expenses}></BarChart>
-        </div>
-
+            <BarChart expenses={expenses} />
+        </>
     )
 }
 
-export default ExpenseList;
+export default ExpenseList

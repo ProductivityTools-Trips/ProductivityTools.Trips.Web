@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import moment from 'moment'
 import service from '../../services/apiService'
-import './TripList.css'
+import { SortHeader, useSort } from '../Shared/Table'
+import { EXPENSED_SCALE, barColor, fmtMoney, fmtRange, sortBy } from '../../utils/format'
 
 const COLUMNS = [
     { key: 'name', label: 'Name' },
@@ -12,51 +12,21 @@ const COLUMNS = [
     { key: 'expensed', label: 'Expensed', numeric: true },
 ]
 
-/** Expensed bar reaches full width / dark red at this amount (PLN). */
-const EXPENSED_SCALE = 30000
-
-/** 0 → vivid green, 1 → deep red; values in between blend smoothly. */
-const barColor = (t) => {
-    const hue = 140 - 140 * t        // 140° green → 0° red
-    const light = 42 - 6 * t         // slightly darker towards red
-    return `hsl(${hue}, 70%, ${light}%)`
-}
-
-const fmtMoney = (v) => v == null ? '—' : v.toLocaleString('pl-PL', { maximumFractionDigits: 0 })
-
-const fmtRange = (start, end) => {
-    const s = moment(start), e = moment(end)
-    if (s.isSame(e, 'day')) return e.format('D MMM YYYY')
-    const sameYear = s.year() === e.year()
-    const sameMonth = sameYear && s.month() === e.month()
-    const left = sameMonth ? s.format('D') : sameYear ? s.format('D MMM') : s.format('D MMM YYYY')
-    return `${left} – ${e.format('D MMM YYYY')}`
-}
-
 function TripList() {
     const navigate = useNavigate()
     const [trips, setTrips] = useState(null)
     const [query, setQuery] = useState('')
-    const [sort, setSort] = useState({ key: 'start', dir: 'desc' })
+    const [sort, toggleSort] = useSort('start')
 
     useEffect(() => {
         service.getTripsFullView().then(setTrips)
     }, [])
 
-    const toggleSort = (key) =>
-        setSort(prev => prev.key === key
-            ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' }
-            : { key, dir: key === 'name' ? 'asc' : 'desc' })
-
     const visible = useMemo(() => {
         if (!trips) return null
         const q = query.trim().toLowerCase()
         const filtered = q ? trips.filter(t => t.name?.toLowerCase().includes(q)) : trips
-        const sign = sort.dir === 'asc' ? 1 : -1
-        return [...filtered].sort((a, b) => {
-            const x = a[sort.key] ?? '', y = b[sort.key] ?? ''
-            return x > y ? sign : x < y ? -sign : 0
-        })
+        return sortBy(filtered, sort.key, sort.dir)
     }, [trips, query, sort])
 
     const totals = useMemo(() => ({
@@ -66,71 +36,56 @@ function TripList() {
     }), [trips])
 
     return (
-        <section className="trips">
-            <header className="trips__header">
+        <section className="page">
+            <header className="page__header">
                 <div>
-                    <h1 className="trips__title">Trips</h1>
-                    <p className="trips__summary">
+                    <h1 className="page__title">Trips</h1>
+                    <p className="page__subtitle">
                         {totals.count} trips · {totals.days} days · {fmtMoney(totals.cost)} PLN
                     </p>
                 </div>
-                <div className="trips__actions">
+                <div className="page__actions">
                     <input
-                        className="trips__search"
+                        className="input input--search"
                         placeholder="Search"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                     />
-                    <Link className="trips__add" to="addtrip/">＋ Add trip</Link>
+                    <Link className="btn btn--primary" to="addtrip/">＋ Add trip</Link>
                 </div>
             </header>
 
-            <div className="trips__card">
-                <table className="trips__table">
+            <div className="card">
+                <table className="tbl">
                     <thead>
                         <tr>
-                            {COLUMNS.map(c => (
-                                <th key={c.key} className={`${c.className ?? ''} ${c.numeric ? 'trips__num' : ''}`}>
-                                    <button
-                                        className={`trips__sort ${sort.key === c.key ? 'is-active' : ''}`}
-                                        onClick={() => toggleSort(c.key)}
-                                    >
-                                        {c.label}
-                                        <span className="trips__sort-icon">
-                                            {sort.key === c.key ? (sort.dir === 'asc' ? '▲' : '▼') : '⇅'}
-                                        </span>
-                                    </button>
-                                </th>
-                            ))}
+                            {COLUMNS.map(c => <SortHeader key={c.key} col={c} sort={sort} onSort={toggleSort} />)}
                         </tr>
                     </thead>
                     <tbody>
                         {visible?.map(x => {
                             const ratio = Math.min(100, Math.max(0, (x.expensed || 0) / EXPENSED_SCALE * 100))
                             return (
-                                <tr key={x.tripId} onClick={() => navigate(`tripdetail/${x.tripId}`)}>
-                                    <td className="trips__name">
+                                <tr key={x.tripId} className="is-link" onClick={() => navigate(`tripdetail/${x.tripId}`)}>
+                                    <td className="tbl__strong">
                                         <Link to={`tripdetail/${x.tripId}`} onClick={e => e.stopPropagation()}>{x.name}</Link>
                                     </td>
-                                    <td className="trips__dates">{fmtRange(x.start, x.end)}</td>
+                                    <td className="tbl__nowrap">{fmtRange(x.start, x.end)}</td>
                                     <td className="hide-sm">
-                                        <span className="trips__pill">{x.days ?? '—'} d · {x.nights ?? '—'} n</span>
+                                        <span className="pill">{x.days ?? '—'} d · {x.nights ?? '—'} n</span>
                                     </td>
-                                    <td className="trips__num">{fmtMoney(x.cost)} PLN</td>
-                                    <td className="trips__num">
+                                    <td className="tbl__num">{fmtMoney(x.cost)} PLN</td>
+                                    <td className="tbl__num">
                                         {fmtMoney(x.expensed)}
-                                        <div className="trips__progress" title={`${fmtMoney(x.expensed)} / ${fmtMoney(EXPENSED_SCALE)} PLN`}>
-                                            <span style={{
-                                                width: `${ratio}%`,
-                                                backgroundColor: barColor(ratio / 100),
-                                            }} />
+                                        <div className="progress" title={`${fmtMoney(x.expensed)} / ${fmtMoney(EXPENSED_SCALE)} PLN`}>
+                                            <span style={{ width: `${ratio}%`, backgroundColor: barColor(ratio / 100) }} />
                                         </div>
                                     </td>
                                 </tr>
                             )
                         })}
                         {visible && visible.length === 0 && (
-                            <tr><td colSpan={COLUMNS.length} className="trips__empty">No trips found</td></tr>
+                            <tr><td colSpan={COLUMNS.length} className="tbl__empty">No trips found</td></tr>
                         )}
                     </tbody>
                 </table>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css';
+import './styles/ui.css';
 import Home from './Components/Home'
 //import TripAdd from './Components/TripAdd';
 import TripDetail from './Components/TripDetail';
