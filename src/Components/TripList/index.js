@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import service from '../../services/apiService'
 import { SortHeader, useSort } from '../Shared/Table'
-import { EXPENSED_SCALE, barColor, fmtMoney, fmtRange, sortBy } from '../../utils/format'
+import { EXPENSED_SCALE, barColor, fmtMoney, fmtDate, sortBy } from '../../utils/format'
 
 const COLUMNS = [
     { key: 'name', label: 'Name' },
-    { key: 'start', label: 'Dates' },
+    { key: 'start', label: 'Date' },
     { key: 'days', label: 'Duration', className: 'hide-sm' },
     { key: 'cost', label: 'Cost', numeric: true },
     { key: 'expensed', label: 'Expensed', numeric: true },
@@ -70,7 +70,7 @@ function TripList() {
                                     <td className="tbl__strong">
                                         <Link to={`tripdetail/${x.tripId}`} onClick={e => e.stopPropagation()}>{x.name}</Link>
                                     </td>
-                                    <td className="tbl__nowrap">{fmtRange(x.start, x.end)}</td>
+                                    <td className="tbl__nowrap">{fmtDate(x.start)}</td>
                                     <td className="hide-sm">
                                         <span className="pill">{x.days ?? '—'} d · {x.nights ?? '—'} n</span>
                                     </td>
