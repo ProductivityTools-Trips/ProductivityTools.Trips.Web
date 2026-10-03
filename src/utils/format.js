@@ -13,15 +13,14 @@ export const barColor = (t) => {
 export const fmtMoney = (v, digits = 0) =>
     v == null ? '—' : v.toLocaleString('pl-PL', { maximumFractionDigits: digits })
 
-export const fmtDate = (d) => moment(d).format('D MMM YYYY')
+const DATE_FMT = 'YYYY.MM.DD'
+
+export const fmtDate = (d) => moment(d).format(DATE_FMT)
 
 export const fmtRange = (start, end) => {
     const s = moment(start), e = moment(end)
-    if (s.isSame(e, 'day')) return e.format('D MMM YYYY')
-    const sameYear = s.year() === e.year()
-    const sameMonth = sameYear && s.month() === e.month()
-    const left = sameMonth ? s.format('D') : sameYear ? s.format('D MMM') : s.format('D MMM YYYY')
-    return `${left} – ${e.format('D MMM YYYY')}`
+    if (s.isSame(e, 'day')) return e.format(DATE_FMT)
+    return `${s.format(DATE_FMT)}-${e.format(DATE_FMT)}`
 }
 
 /** Generic comparator-driven sort helper: returns a new sorted array. */

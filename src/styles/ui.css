@@ -235,3 +235,101 @@
   .hide-sm { display: none !important; }
   .tbl th, .tbl td { padding: 12px 10px; }
 }
+
+/* ---- forms ---- */
+.form { display: grid; gap: 20px; }
+.form__section { display: grid; gap: 14px; }
+.form__section-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.form__grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 720px) { .form__grid--2 { grid-template-columns: 1fr 1fr; } }
+
+.field { display: grid; gap: 6px; }
+.field__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.field__input {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  transition: border-color .15s, box-shadow .15s;
+}
+.field__input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.field__input input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.field__input input[type=number]::-webkit-outer-spin-button,
+.field__input input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.field__input input[type=number] { -moz-appearance: textfield; }
+.field__adornment { color: var(--muted); font-size: 13px; margin-left: 8px; white-space: nowrap; }
+.field__hint { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+.field__hint strong { color: var(--text); font-weight: 500; }
+
+.link-btn {
+  all: unset;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.link-btn:hover { text-decoration: underline; }
+.link-btn:disabled { color: var(--muted); cursor: default; text-decoration: none; }
+
+/* segmented choice chips (currency / category) */
+.choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.choice {
+  all: unset;
+  cursor: pointer;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 13.5px;
+  color: var(--text);
+  transition: background .12s, border-color .12s, color .12s;
+}
+.choice:hover { border-color: #C9D0C9; background: #FAFBFA; }
+.choice.is-selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.form__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.form__footer-right { display: flex; gap: 10px; }
+.btn--danger { background: var(--surface); color: #A32020; border-color: var(--line); }
+.btn--danger:hover { background: #FBEDED; border-color: #E8B8B8; }
+
+.callout {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
