@@ -21,7 +21,21 @@ const LOCKED_HELP = {
     friendsDebit: (t) => <>Not used on <strong>{t}</strong> trips.</>,
 }
 
+/**
+ * Normalises typed amounts: comma → dot, strips anything that isn't a digit,
+ * a single dot or a leading minus (so "1 234,50" becomes "1234.50").
+ */
+export const normalizeAmount = (raw) => {
+    let v = String(raw ?? '').replace(/,/g, '.').replace(/\s+/g, '')
+    const negative = v.startsWith('-')
+    v = v.replace(/[^0-9.]/g, '')
+    const [intPart, ...rest] = v.split('.')
+    v = rest.length ? `${intPart}.${rest.join('')}` : intPart
+    return (negative ? '-' : '') + v
+}
+
 function NumberField({ name, label, value, onChange, adornment, hint, onClear, onCopy, disabled }) {
+    const handle = (e) => onChange({ target: { name, value: normalizeAmount(e.target.value) } })
     return (
         <div className="field">
             <label className="field__label" htmlFor={`f-${name}`}>
@@ -37,12 +51,12 @@ function NumberField({ name, label, value, onChange, adornment, hint, onClear, o
                 <input
                     id={`f-${name}`}
                     name={name}
-                    type="number"
-                    step="0.01"
+                    type="text"
                     inputMode="decimal"
+                    autoComplete="off"
                     placeholder="0.00"
                     value={value ?? ''}
-                    onChange={onChange}
+                    onChange={handle}
                     disabled={disabled}
                 />
                 {adornment && <span className="field__adornment">{adornment}</span>}
