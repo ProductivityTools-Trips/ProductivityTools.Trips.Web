@@ -97,6 +97,7 @@ function TripList() {
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                     />
+                    <Link className="btn btn--ghost" to="/reports/">Reports</Link>
                     <Link className="btn btn--primary" to="addtrip/">＋ Add trip</Link>
                 </div>
             </header>

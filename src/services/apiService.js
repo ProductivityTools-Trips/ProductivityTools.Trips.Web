@@ -106,6 +106,12 @@ async function getExpenseFullView(id) {
     return response.data
 }
 
+/** Every expense of every trip (reports). */
+async function getAllExpensesFullView() {
+    const response = await axios.get(`${config.PATH_BASE}/Expense/GetAllFullView`);
+    return response.data
+}
+
 
 async function saveExpense(expense) {
     const response = await axios.post(`${config.PATH_BASE}/Expense/Save`, expense)
@@ -166,6 +172,7 @@ const service = {
     deleteTripCurrency,
     getExpenses,
     getExpenseFullView,
+    getAllExpensesFullView,
     getExpense,
     saveExpense,
     addExpense,

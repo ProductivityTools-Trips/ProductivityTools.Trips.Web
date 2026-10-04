@@ -8,6 +8,7 @@ import ExpenseEdit from './Components/ExpenseEdit';
 import ExpenseAdd from './Components/ExpenseAdd';
 import TripCurrency from './Components/TripCurrency';
 import JournalEdit from './Components/JournalEdit';
+import Reports from './Components/Reports';
 import Login from "./session/login"
 import RequireAuth from './session/RequireAuth';
 import { installAuthInterceptors } from './session/authInterceptor';
@@ -33,6 +34,7 @@ function App() {
               <Route path='ExpenseAdd/' element={<ExpenseAdd />} />
               <Route path='JournalAdd/' element={<JournalEdit />} />
               <Route path='JournalEdit/' element={<JournalEdit />} />
+              <Route path='reports/' element={<Reports />} />
             </Route>
           </Routes>
         </BrowserRouter>
