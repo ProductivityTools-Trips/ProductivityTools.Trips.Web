@@ -38,6 +38,15 @@ async function getAppName() {
 
 }
 
+/** Date / server / app name in one go, without toasts (used by the status bar). */
+async function getDebugInfo() {
+    const [date, serverName, appName] = await Promise.all([
+        axios.get(`${config.PATH_BASE}/Debug/Date`),
+        axios.get(`${config.PATH_BASE}/Debug/ServerName`),
+        axios.get(`${config.PATH_BASE}/Debug/AppName`),
+    ])
+    return { date: date.data, serverName: serverName.data, appName: appName.data }
+}
 
 async function addTrip(trip) {
     const response = await axios.post(`${config.PATH_BASE}/Trip/Add`, trip)
@@ -146,6 +155,7 @@ const service = {
     getDate,
     getServerName,
     getAppName,
+    getDebugInfo,
     addTrip,
     getTrips,
     getTrip,
