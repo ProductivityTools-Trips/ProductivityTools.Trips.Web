@@ -1,12 +1,8 @@
-
 import { toast } from "react-toastify";
 
+/** Auth header is added by the axios interceptor (session/authInterceptor.js). */
 async function invokeCall(call) {
-        let token = localStorage.getItem("token");
-        debugger;
-        const header = { headers: { Authorization: `Bearer ${token}` } };
-        const response =await call(header);
-        return response;
+    return call({});
 }
 
 export async function invokeCallWithToast(call, pendingMessage, successMessage) {
@@ -19,11 +15,10 @@ export async function invokeCallWithToast(call, pendingMessage, successMessage) 
                 return (
                     <p>
                         {data.message}<br/>
-                        {data.request.responseURL}
+                        {data.request?.responseURL}
                     </p>
                 );
             },
         },
     });
 }
-

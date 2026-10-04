@@ -361,3 +361,16 @@
   background: #FAFBFA;
 }
 .inline-form .field__input { height: 36px; width: 140px; }
+
+/* ---- top bar (signed-in user + logout) ---- */
+.topbar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  font-family: "Inter", "Roboto", system-ui, sans-serif;
+}
+.topbar__user { font-size: 13px; color: var(--muted); }

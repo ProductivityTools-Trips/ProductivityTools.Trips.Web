@@ -1,31 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import TripList from '../TripList'
-import service from '../../services/apiService'
-import { useNavigate } from 'react-router-dom';
-import { auth, logout } from "../../session/firebase";
-import Debug from '../Debug';
-
-
+import { auth, logout } from '../../session/firebase'
+import Debug from '../Debug'
 
 function Home() {
-    const navigate = useNavigate();
-
-
-
-    const login = () => {
-        navigate("/Login")
-    }
-
+    const [user] = useAuthState(auth)
 
     return (
         <div>
-            <Debug></Debug>
-            Hello
-            <button onClick={login}>Login</button>
-            <button onClick={logout}>Logout</button>
-            <div>
-                <TripList />
+            <div className="topbar">
+                <span className="topbar__user">{user?.email}</span>
+                <button type="button" className="btn btn--ghost btn--sm" onClick={logout}>Log out</button>
             </div>
+            <Debug />
+            <TripList />
         </div>
     )
 }
