@@ -12,6 +12,14 @@ const COLUMNS = [
     { key: 'expensed', label: 'Expensed', numeric: true },
 ]
 
+const SummaryLine = ({ label, s }) => (
+    <span className="summary__item">
+        <span className="summary__label">{label}</span>
+        {s.count} trips · {s.days} days · {fmtMoney(s.cost)} PLN
+        {s.expensed !== s.cost && <span className="tbl__muted"> (expensed {fmtMoney(s.expensed)})</span>}
+    </span>
+)
+
 function TripList() {
     const navigate = useNavigate()
     const [trips, setTrips] = useState(null)
@@ -29,20 +37,31 @@ function TripList() {
         return sortBy(filtered, sort.key, sort.dir)
     }, [trips, query, sort])
 
-    const totals = useMemo(() => ({
-        count: trips?.length ?? 0,
-        days: trips?.reduce((s, t) => s + (t.days || 0), 0) ?? 0,
-        cost: trips?.reduce((s, t) => s + (t.cost || 0), 0) ?? 0,
-    }), [trips])
+    // Summary split into Private (Family + Friends) and Company trips.
+    const summary = useMemo(() => {
+        const sum = (rows) => ({
+            count: rows.length,
+            days: rows.reduce((s, t) => s + (t.days || 0), 0),
+            cost: rows.reduce((s, t) => s + (t.cost || 0), 0),
+            expensed: rows.reduce((s, t) => s + (t.expensed || 0), 0),
+        })
+        const all = trips ?? []
+        const company = all.filter(t => t.tripType === 'Company')
+        const privateTrips = all.filter(t => t.tripType !== 'Company')
+        return { all: sum(all), private: sum(privateTrips), company: sum(company) }
+    }, [trips])
+
 
     return (
         <section className="page">
             <header className="page__header">
                 <div>
                     <h1 className="page__title">Trips</h1>
-                    <p className="page__subtitle">
-                        {totals.count} trips · {totals.days} days · {fmtMoney(totals.cost)} PLN
-                    </p>
+                    <div className="page__subtitle summary">
+                        <SummaryLine label="Private" s={summary.private} />
+                        <SummaryLine label="Company" s={summary.company} />
+                        <SummaryLine label="All" s={summary.all} />
+                    </div>
                 </div>
                 <div className="page__actions">
                     <input
