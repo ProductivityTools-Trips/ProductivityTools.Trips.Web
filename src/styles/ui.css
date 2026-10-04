@@ -371,12 +371,35 @@
   line-height: 1;
   padding: 3px 24px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 18px;
-  flex-wrap: wrap;
   font-variant-numeric: tabular-nums;
   letter-spacing: .01em;
 }
+.statusbar__left { display: flex; gap: 18px; flex-wrap: wrap; }
 .statusbar__error { color: #FF8A80; }
+
+/* latest API activity (replaces toasts) */
+.statusbar__activity {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #BDBDBD;
+}
+.statusbar__activity.is-pending { color: #E0E0E0; }
+.statusbar__activity.is-success { color: #9CCC9C; }
+.statusbar__activity.is-error   { color: #FF8A80; }
+.statusbar__dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+  animation: statusbar-pulse 1s ease-in-out infinite;
+}
+@keyframes statusbar-pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
 
 /* ---- user row below the strip ---- */
 .userbar {

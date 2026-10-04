@@ -8,7 +8,6 @@ import ExpenseEdit from './Components/ExpenseEdit';
 import ExpenseAdd from './Components/ExpenseAdd';
 import TripCurrency from './Components/TripCurrency';
 import JournalEdit from './Components/JournalEdit';
-import { ToastContainer } from "react-toastify";
 import Login from "./session/login"
 import RequireAuth from './session/RequireAuth';
 import { installAuthInterceptors } from './session/authInterceptor';
@@ -37,7 +36,6 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-        <ToastContainer />
       </div>
     </CacheProvider>
   );
