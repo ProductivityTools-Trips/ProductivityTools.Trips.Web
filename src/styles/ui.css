@@ -313,6 +313,7 @@
 }
 .choice:hover { border-color: #C9D0C9; background: #FAFBFA; }
 .choice.is-selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+.choice--sm { padding: 4px 10px; font-size: 12.5px; }
 
 .form__footer {
   display: flex;

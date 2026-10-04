@@ -1,22 +1,32 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { PieChart } from '@mui/x-charts/PieChart'
 import { fmtMoney } from '../../utils/format'
 
+/** Which PLN figure the breakdown is based on. */
+const METRICS = [
+    { key: 'expensedInPln', label: 'Expensed PLN', column: 'Expensed PLN' },
+    { key: 'valuePln', label: 'Value PLN', column: 'Value PLN' },
+]
+
 /**
- * Expensed-in-PLN breakdown per category for the expenses flagged `checked`.
+ * Per-category breakdown (table + donut) of the expenses flagged `checked`,
+ * switchable between Expensed in PLN and Value in PLN.
  * (Name kept for backwards compatibility – it renders a pie, not a bar chart.)
  */
 function BarChart({ expenses }) {
+    const [metricKey, setMetricKey] = useState(METRICS[0].key)
+    const metric = METRICS.find(m => m.key === metricKey)
+
     const data = useMemo(() => {
         const byCat = new Map()
         expenses?.forEach(e => {
             if (!e.checked) return
-            byCat.set(e.categoryName, (byCat.get(e.categoryName) || 0) + (e.expensedInPln || 0))
+            byCat.set(e.categoryName, (byCat.get(e.categoryName) || 0) + (e[metricKey] || 0))
         })
         return [...byCat.entries()]
             .map(([id, value]) => ({ id, label: id, value }))
             .sort((a, b) => b.value - a.value)
-    }, [expenses])
+    }, [expenses, metricKey])
 
     const total = data.reduce((s, d) => s + d.value, 0)
 
@@ -25,7 +35,18 @@ function BarChart({ expenses }) {
     return (
         <div className="section">
             <div className="section__head">
-                <h2 className="section__title">By category</h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <h2 className="section__title">By category</h2>
+                    <div className="choices">
+                        {METRICS.map(m => (
+                            <button key={m.key} type="button"
+                                className={`choice choice--sm ${m.key === metricKey ? 'is-selected' : ''}`}
+                                onClick={() => setMetricKey(m.key)}>
+                                {m.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
                 <span className="section__meta">{fmtMoney(total)} PLN in selected expenses</span>
             </div>
 
@@ -35,7 +56,7 @@ function BarChart({ expenses }) {
                         <thead>
                             <tr>
                                 <th>Category</th>
-                                <th className="tbl__num">Expensed PLN</th>
+                                <th className="tbl__num">{metric.column}</th>
                                 <th className="tbl__num">Share</th>
                             </tr>
                         </thead>
@@ -51,6 +72,15 @@ function BarChart({ expenses }) {
                                 <tr><td colSpan={3} className="tbl__empty">Select expenses to see the breakdown</td></tr>
                             )}
                         </tbody>
+                        {data.length > 0 && (
+                            <tfoot>
+                                <tr>
+                                    <td>Total</td>
+                                    <td className="tbl__num">{fmtMoney(total)}</td>
+                                    <td className="tbl__num">100%</td>
+                                </tr>
+                            </tfoot>
+                        )}
                     </table>
                 </div>
 
