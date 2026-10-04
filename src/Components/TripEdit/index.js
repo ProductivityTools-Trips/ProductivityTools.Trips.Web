@@ -1,125 +1,143 @@
-
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import moment from 'moment'
+import { TextField } from '@mui/material'
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import service from '../../services/apiService'
-import { Link } from 'react-router-dom'
-import TripCurrency from "../TripCurrencyList";
-
-import moment from 'moment';
-
-import TextField from '@mui/material/TextField';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Button from '@mui/material/Button';
-
-
-
+import TripCurrencyList from '../TripCurrencyList'
 
 moment.locale('en', { week: { dow: 1 } })
 
-function TripEdit(props) {
-    let params = useParams();
+const ISO = 'yyyy-MM-DD'
 
+function DateField({ label, value, onChange }) {
+    return (
+        <div className="field">
+            <span className="field__label">{label}</span>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DatePicker
+                    inputFormat="YYYY.MM.DD"
+                    mask="____.__.__"
+                    value={value ?? null}
+                    onChange={(v) => v && v.isValid() && onChange(v)}
+                    renderInput={(params) => <TextField {...params} size="small" fullWidth />}
+                />
+            </LocalizationProvider>
+        </div>
+    )
+}
+
+function TripEdit({ mode }) {
+    const { id } = useParams()
+    const navigate = useNavigate()
+    const isEdit = mode === 'edit'
     const [trip, setTrip] = useState(null)
-    const navigate = useNavigate();
 
     useEffect(() => {
-        if (props.mode == 'add') {
-            setTrip({ start: moment().format('yyyy-MM-DD'), end: moment().format('yyyy-MM-DD') })
+        if (isEdit) {
+            service.getTrip(id).then(setTrip)
+        } else {
+            const today = moment().format(ISO)
+            setTrip({ start: today, end: today, days: 1, nights: 0 })
         }
-        const fetchData = async () => {
-            const r = await service.getTrip(params.id);
-            setTrip(r);
-        }
-        fetchData();
-    }, [])
+    }, [isEdit, id])
 
+    const set = (patch) => setTrip(prev => ({ ...prev, ...patch }))
+    const handleChange = (e) => set({ [e.target.name]: e.target.value })
 
-    const handleChange = (e) => {
-        console.log(e);
-        const { name, value } = e.target;
-        console.log(name);
-        console.log(value);
-        setTrip(prevState => ({
-            ...prevState, [name]: value
-        }))
+    /** Keep days/nights in sync with the date range. */
+    const setDates = (start, end) => {
+        const s = moment(start), e = moment(end)
+        const nights = Math.max(0, e.diff(s, 'days'))
+        set({ start: s.format(ISO), end: e.format(ISO), nights, days: nights + 1 })
     }
 
+    const back = isEdit ? `/tripdetail/${id}` : '/'
+    const close = () => navigate(back, { replace: true })
     const save = async () => {
-        if (props.mode == 'edit') {
-            await service.saveTrip(trip);
-            navigate("/tripdetail/"+params.id, { replace: true })
-        }
-
-        if (props.mode == 'add') {
-            await service.addTrip(trip);
-            navigate('/', { replace: true })
-        }
-    }
-
-    const calculateDays = async (s1, e1) => {
-
-        let n = e1.diff(s1, 'days');
-        let d = n + 1;
-
-        console.log('dff', d);
-        setTrip(prevState => ({
-            ...prevState, 'days': d
-        }))
-        setTrip(prevState => ({
-            ...prevState, 'nights': n
-        }))
-        console.log(trip);
+        if (isEdit) await service.saveTrip(trip)
+        else await service.addTrip(trip)
+        close()
     }
 
     return (
-        <div>
-            <Link to={"/"}>Trip List</Link>
-            <p>{props.mode == 'edit' ? <span>Mode: Edit</span> : <span>Mode: Add</span>}</p>
-            <p><TextField label="Trip Name" name="name" value={trip && trip.name || ''} onChange={handleChange}></TextField></p>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-                <p><DatePicker
-                    label="From"
-                    value={trip && trip.start}
-                    inputFormat='yyyy.MM.DD'
-                    onChange={(newValue) => {
-                        console.log(newValue.format());
-                        setTrip(prevState => ({
-                            ...prevState, start: newValue.format('yyyy-MM-DD')
-                        }));
+        <section className="page">
+            <header className="page__header">
+                <div>
+                    <Link className="page__back" to={back}>← {isEdit ? (trip?.name ?? 'Trip') : 'All trips'}</Link>
+                    <h1 className="page__title">{isEdit ? 'Edit trip' : 'New trip'}</h1>
+                    {isEdit && trip && <p className="page__subtitle">{trip.name}</p>}
+                </div>
+            </header>
 
-                        calculateDays(newValue, trip.end);
+            {trip && (
+                <div className="card card--pad">
+                    <div className="form">
+                        <section className="form__section">
+                            <h2 className="form__section-title">Details</h2>
+                            <div className="field">
+                                <label className="field__label" htmlFor="t-name">Name</label>
+                                <div className="field__input">
+                                    <input id="t-name" name="name" type="text" placeholder="e.g. Costa Toscana"
+                                        value={trip.name ?? ''} onChange={handleChange} autoFocus={!isEdit} />
+                                </div>
+                            </div>
+                            <div className="form__grid form__grid--2">
+                                <DateField label="From" value={trip.start} onChange={(v) => setDates(v, moment.max(v, moment(trip.end)))} />
+                                <DateField label="To" value={trip.end} onChange={(v) => setDates(moment.min(v, moment(trip.start)), v)} />
+                            </div>
+                            <div className="form__grid form__grid--2">
+                                <div className="field">
+                                    <label className="field__label" htmlFor="t-days">Days</label>
+                                    <div className="field__input">
+                                        <input id="t-days" name="days" type="number" min="0" value={trip.days ?? ''} onChange={handleChange} />
+                                    </div>
+                                    <p className="field__hint">Calculated from the dates – override if needed.</p>
+                                </div>
+                                <div className="field">
+                                    <label className="field__label" htmlFor="t-nights">Nights</label>
+                                    <div className="field__input">
+                                        <input id="t-nights" name="nights" type="number" min="0" value={trip.nights ?? ''} onChange={handleChange} />
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                /></p>
-                <p><DatePicker
-                    label="To"
-                    value={trip && trip.end}
-                    inputFormat='yyyy.MM.DD'
-                    onChange={(newValue) => {
-                        console.log(newValue.format());
-                        setTrip(prevState => ({
-                            ...prevState, end: newValue.format('yyyy-MM-DD')
-                        }));
-                        console.log(trip);
-                        calculateDays(trip.start, newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-                </p>
-            </LocalizationProvider>
-            <div><TextField label="Days" type="number" name="days" onChange={handleChange} value={trip && trip.days || 0 } margin="dense"></TextField></div>
-            <div><TextField label="Nights" type="number" name="nights" onChange={handleChange} value={trip && trip.nights || 0} margin="dense"></TextField></div>
-            <div><TextField label="Description" type="text" multiline fullWidth name="description" onChange={handleChange} value={trip && trip.description || ''} margin="dense"></TextField></div>
-            <div><TextField label="Learnings" type="text" multiline fullWidth name="learnings" onChange={handleChange} value={trip && trip.learnings || ''} margin="dense"></TextField></div>
+                        <section className="form__section">
+                            <h2 className="form__section-title">Notes</h2>
+                            <div className="field">
+                                <label className="field__label" htmlFor="t-desc">Description</label>
+                                <div className="field__input field__input--area">
+                                    <textarea id="t-desc" name="description" rows={4} placeholder="Where, with whom, highlights…"
+                                        value={trip.description ?? ''} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="field">
+                                <label className="field__label" htmlFor="t-learn">Learnings</label>
+                                <div className="field__input field__input--area">
+                                    <textarea id="t-learn" name="learnings" rows={4} placeholder="What to do differently next time"
+                                        value={trip.learnings ?? ''} onChange={handleChange} />
+                                </div>
+                            </div>
+                        </section>
 
-            <Button onClick={save} variant="contained">Save</Button>
-            
-            {props.mode == 'edit' ? <TripCurrency></TripCurrency> : <span></span>}
-        </div>
+                        <footer className="form__footer">
+                            <div />
+                            <div className="form__footer-right">
+                                <button type="button" className="btn btn--ghost" onClick={close}>Cancel</button>
+                                <button type="button" className="btn btn--primary" onClick={save}>
+                                    {isEdit ? 'Save changes' : 'Create trip'}
+                                </button>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            )}
 
+            {isEdit && <TripCurrencyList tripId={id} />}
+        </section>
     )
 }
 

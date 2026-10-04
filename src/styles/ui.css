@@ -333,3 +333,31 @@
   font-size: 13px;
   line-height: 1.5;
 }
+
+/* textarea variant of .field__input */
+.field__input--area { height: auto; padding: 10px 12px; }
+.field__input--area textarea {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  resize: vertical;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.field__input.is-readonly { background: #FAFBFA; color: var(--muted); }
+
+/* inline add-row inside a card (e.g. trip currencies) */
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--line);
+  background: #FAFBFA;
+}
+.inline-form .field__input { height: 36px; width: 140px; }
