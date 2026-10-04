@@ -7,7 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import service from '../../services/apiService'
 import TripCurrencyList from '../TripCurrencyList'
-import { DEFAULT_TRIP_TYPE, TRIP_TYPES } from '../../utils/tripTypes'
+import { DEFAULT_TRIP_TYPE, TRIP_CATEGORIES, TRIP_TYPES } from '../../utils/tripTypes'
 
 moment.locale('en', { week: { dow: 1 } })
 
@@ -101,6 +101,23 @@ function TripEdit({ mode }) {
                                     (Family cost follows Expensed), <strong>Friends</strong> – all fields,
                                     <strong> Company</strong> – Value &amp; Expensed only.
                                 </p>
+                            </div>
+                            <div className="field">
+                                <span className="field__label">Category <span className="tbl__muted" style={{ fontWeight: 400 }}>(optional)</span></span>
+                                <div className="choices">
+                                    <button type="button"
+                                        className={`choice ${!trip.tripCategory ? 'is-selected' : ''}`}
+                                        onClick={() => set({ tripCategory: null })}>
+                                        None
+                                    </button>
+                                    {TRIP_CATEGORIES.map(c => (
+                                        <button key={c} type="button"
+                                            className={`choice ${trip.tripCategory === c ? 'is-selected' : ''}`}
+                                            onClick={() => set({ tripCategory: c })}>
+                                            {c}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                             <div className="form__grid form__grid--2">
                                 <DateField label="From" value={trip.start} onChange={(v) => setDates(v, moment.max(v, moment(trip.end)))} />

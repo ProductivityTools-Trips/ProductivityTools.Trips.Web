@@ -7,6 +7,7 @@ import { EXPENSED_SCALE, barColor, fmtMoney, fmtDate, sortBy } from '../../utils
 const COLUMNS = [
     { key: 'name', label: 'Name' },
     { key: 'start', label: 'Date' },
+    { key: 'tripCategory', label: 'Category', className: 'hide-sm' },
     { key: 'days', label: 'Duration', className: 'hide-sm' },
     { key: 'cost', label: 'Cost', numeric: true },
     { key: 'expensed', label: 'Expensed', numeric: true },
@@ -24,7 +25,7 @@ function TripList() {
     const navigate = useNavigate()
     const [trips, setTrips] = useState(null)
     const [query, setQuery] = useState('')
-    const [sort, toggleSort] = useSort('start')
+    const [sort, toggleSort] = useSort('start', 'desc', ['name', 'tripCategory'])
 
     useEffect(() => {
         service.getTripsFullView().then(setTrips)
@@ -91,6 +92,9 @@ function TripList() {
                                         {x.tripType && <span className="pill" style={{ marginLeft: 8 }}>{x.tripType}</span>}
                                     </td>
                                     <td className="tbl__nowrap">{fmtDate(x.start)}</td>
+                                    <td className="hide-sm">
+                                        {x.tripCategory ? <span className="pill">{x.tripCategory}</span> : <span className="tbl__muted">—</span>}
+                                    </td>
                                     <td className="hide-sm">
                                         <span className="pill">{x.days ?? '—'} d · {x.nights ?? '—'} n</span>
                                     </td>

@@ -25,6 +25,7 @@ function TripDetail() {
                             {fmtRange(trip.start, trip.end)}
                             {trip.days != null && <> · {trip.days} d · {trip.nights ?? '—'} n</>}
                             {trip.tripType && <> · {trip.tripType}</>}
+                            {trip.tripCategory && <> · {trip.tripCategory}</>}
                         </p>
                     )}
                 </div>

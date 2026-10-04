@@ -33,3 +33,6 @@ export const applyTripTypeRules = (expense, tripType) => {
     if (!r.friendsDebit) next.friendsDebit = 0
     return next
 }
+
+/** Optional trip category (nullable). Mirrors TripCategories.cs in the API. */
+export const TRIP_CATEGORIES = ['Ski', 'CityBreak', 'Vacations', 'Festival', 'Spain']
