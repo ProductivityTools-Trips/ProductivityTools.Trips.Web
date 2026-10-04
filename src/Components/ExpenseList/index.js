@@ -40,11 +40,12 @@ function ExpenseList() {
 
     const totals = useMemo(() => {
         const t = Object.fromEntries(SUM_KEYS.map(k => [k, 0]))
-        expenses?.forEach(x => SUM_KEYS.forEach(k => { t[k] += x[k] || 0 }))
+        expenses?.filter(x => x.checked).forEach(x => SUM_KEYS.forEach(k => { t[k] += x[k] || 0 }))
         return t
     }, [expenses])
 
-    const allChecked = !!expenses?.length && expenses.every(x => x.checked)
+    const selectedCount = expenses?.filter(x => x.checked).length ?? 0
+    const allChecked = !!expenses?.length && selectedCount === expenses.length
 
     return (
         <>
@@ -52,7 +53,10 @@ function ExpenseList() {
                 <div className="section__head">
                     <h2 className="section__title">Expenses</h2>
                     <span className="section__meta">
-                        {expenses?.length ?? 0} items · {fmtMoney(totals.expensedInPln)} PLN expensed
+                        {allChecked
+                            ? `${expenses?.length ?? 0} items`
+                            : `${selectedCount} of ${expenses?.length ?? 0} selected`}
+                        {' · '}{fmtMoney(totals.expensedInPln)} PLN expensed
                     </span>
                 </div>
 
@@ -109,7 +113,7 @@ function ExpenseList() {
                         {!!expenses?.length && (
                             <tfoot>
                                 <tr>
-                                    <td colSpan={4}>Total</td>
+                                    <td colSpan={4}>{allChecked ? "Total" : `Total (${selectedCount} selected)`}</td>
                                     <td className="tbl__num">{fmtMoney(totals.expensed)}</td>
                                     <td className="tbl__num">{fmtMoney(totals.familyCost)}</td>
                                     <td className="tbl__num hide-sm">{fmtMoney(totals.friendsDebit)}</td>
