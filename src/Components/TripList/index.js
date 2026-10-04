@@ -69,6 +69,7 @@ function TripList() {
                                 <tr key={x.tripId} className="is-link" onClick={() => navigate(`tripdetail/${x.tripId}`)}>
                                     <td className="tbl__strong">
                                         <Link to={`tripdetail/${x.tripId}`} onClick={e => e.stopPropagation()}>{x.name}</Link>
+                                        {x.tripType && <span className="pill" style={{ marginLeft: 8 }}>{x.tripType}</span>}
                                     </td>
                                     <td className="tbl__nowrap">{fmtDate(x.start)}</td>
                                     <td className="hide-sm">

@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import service from '../../services/apiService'
 import TripCurrencyList from '../TripCurrencyList'
+import { DEFAULT_TRIP_TYPE, TRIP_TYPES } from '../../utils/tripTypes'
 
 moment.locale('en', { week: { dow: 1 } })
 
@@ -40,7 +41,7 @@ function TripEdit({ mode }) {
             service.getTrip(id).then(setTrip)
         } else {
             const today = moment().format(ISO)
-            setTrip({ start: today, end: today, days: 1, nights: 0 })
+            setTrip({ start: today, end: today, days: 1, nights: 0, tripType: DEFAULT_TRIP_TYPE })
         }
     }, [isEdit, id])
 
@@ -83,6 +84,23 @@ function TripEdit({ mode }) {
                                     <input id="t-name" name="name" type="text" placeholder="e.g. Costa Toscana"
                                         value={trip.name ?? ''} onChange={handleChange} autoFocus={!isEdit} />
                                 </div>
+                            </div>
+                            <div className="field">
+                                <span className="field__label">Type</span>
+                                <div className="choices">
+                                    {TRIP_TYPES.map(t => (
+                                        <button key={t} type="button"
+                                            className={`choice ${(trip.tripType ?? DEFAULT_TRIP_TYPE) === t ? 'is-selected' : ''}`}
+                                            onClick={() => set({ tripType: t })}>
+                                            {t}
+                                        </button>
+                                    ))}
+                                </div>
+                                <p className="field__hint">
+                                    Decides which expense fields are used: <strong>Family</strong> – Value &amp; Expensed
+                                    (Family cost follows Expensed), <strong>Friends</strong> – all fields,
+                                    <strong> Company</strong> – Value &amp; Expensed only.
+                                </p>
                             </div>
                             <div className="form__grid form__grid--2">
                                 <DateField label="From" value={trip.start} onChange={(v) => setDates(v, moment.max(v, moment(trip.end)))} />

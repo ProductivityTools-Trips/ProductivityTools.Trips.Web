@@ -38,8 +38,9 @@ function ExpenseEdit() {
             </header>
 
             <ExpenseForm
-                expense={expense}
+                expense={trip ? expense : null}   /* wait for trip type before applying field rules */
                 setExpense={setExpense}
+                tripType={trip?.tripType}
                 onSave={save}
                 onClose={close}
                 onDelete={remove}

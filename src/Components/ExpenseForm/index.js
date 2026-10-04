@@ -1,9 +1,10 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { TextField } from '@mui/material'
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { CacheContext } from '../../session/CacheContext'
+import { DEFAULT_TRIP_TYPE, applyTripTypeRules, expenseFieldRules } from '../../utils/tripTypes'
 
 /** Explanations shown under each amount field. */
 export const AMOUNT_HELP = {
@@ -13,17 +14,26 @@ export const AMOUNT_HELP = {
     friendsDebit: <>Money settled with friends. <strong>Positive</strong> when you paid for a friend (they owe you). <strong>Negative</strong> when a friend paid for you (you owe them).</>,
 }
 
-function NumberField({ name, label, value, onChange, adornment, hint, onClear, onCopy }) {
+/** Shown instead of the regular hint when a field is locked by the trip type. */
+const LOCKED_HELP = {
+    familyMirror: <>On a <strong>Family</strong> trip this always equals <strong>Expensed</strong>.</>,
+    familyCost: (t) => <>Not used on <strong>{t}</strong> trips.</>,
+    friendsDebit: (t) => <>Not used on <strong>{t}</strong> trips.</>,
+}
+
+function NumberField({ name, label, value, onChange, adornment, hint, onClear, onCopy, disabled }) {
     return (
         <div className="field">
             <label className="field__label" htmlFor={`f-${name}`}>
                 <span>{label}</span>
-                <span>
-                    {onCopy && <button type="button" className="link-btn" onClick={onCopy}>Copy to all</button>}
-                    {onClear && <button type="button" className="link-btn" onClick={onClear} style={{ marginLeft: 12 }}>Clear</button>}
-                </span>
+                {!disabled && (
+                    <span>
+                        {onCopy && <button type="button" className="link-btn" onClick={onCopy}>Copy to all</button>}
+                        {onClear && <button type="button" className="link-btn" onClick={onClear} style={{ marginLeft: 12 }}>Clear</button>}
+                    </span>
+                )}
             </label>
-            <div className="field__input">
+            <div className={`field__input ${disabled ? 'is-readonly' : ''}`}>
                 <input
                     id={`f-${name}`}
                     name={name}
@@ -33,6 +43,7 @@ function NumberField({ name, label, value, onChange, adornment, hint, onClear, o
                     placeholder="0.00"
                     value={value ?? ''}
                     onChange={onChange}
+                    disabled={disabled}
                 />
                 {adornment && <span className="field__adornment">{adornment}</span>}
             </div>
@@ -43,12 +54,21 @@ function NumberField({ name, label, value, onChange, adornment, hint, onClear, o
 
 /**
  * Shared add/edit expense form. Controlled via `expense` / `setExpense`.
+ * `tripType` (Family | Friends | Company) decides which amount fields are editable.
  */
-function ExpenseForm({ expense, setExpense, onSave, onClose, onDelete, saveLabel = 'Save' }) {
+function ExpenseForm({ expense, setExpense, tripType: tripTypeProp, onSave, onClose, onDelete, saveLabel = 'Save' }) {
     const cache = useContext(CacheContext)
     const currency = cache?.currencies?.find(c => c.currencyId === expense?.currencyId)?.name
+    const tripType = tripTypeProp || DEFAULT_TRIP_TYPE
+    const rules = expenseFieldRules(tripType)
 
-    const set = (patch) => setExpense(prev => ({ ...prev, ...patch }))
+    // Once the trip type is known (or changes), coerce the expense into the allowed shape.
+    useEffect(() => {
+        if (!tripTypeProp) return
+        setExpense(prev => (prev ? applyTripTypeRules(prev, tripTypeProp) : prev))
+    }, [tripTypeProp, setExpense])
+
+    const set = (patch) => setExpense(prev => applyTripTypeRules({ ...prev, ...patch }, tripType))
     const handleChange = (e) => {
         const { name, value } = e.target
         set({ [name]: value })
@@ -112,7 +132,10 @@ function ExpenseForm({ expense, setExpense, onSave, onClose, onDelete, saveLabel
                 </section>
 
                 <section className="form__section">
-                    <h2 className="form__section-title">Amounts</h2>
+                    <div className="section__head" style={{ marginBottom: 0 }}>
+                        <h2 className="form__section-title">Amounts</h2>
+                        <span className="pill" title="Trip type decides which fields are editable">{tripType} trip</span>
+                    </div>
                     <div className="form__grid form__grid--2">
                         <NumberField name="value" label="Value" adornment={currency}
                             value={expense.value} onChange={handleChange}
@@ -122,15 +145,22 @@ function ExpenseForm({ expense, setExpense, onSave, onClose, onDelete, saveLabel
                             hint={AMOUNT_HELP.expensed} onClear={() => set({ expensed: 0 })} />
                         <NumberField name="familyCost" label="Family cost" adornment={currency}
                             value={expense.familyCost} onChange={handleChange}
-                            hint={AMOUNT_HELP.familyCost} onClear={() => set({ familyCost: 0 })} />
+                            disabled={!rules.familyCost}
+                            hint={rules.familyCost ? AMOUNT_HELP.familyCost
+                                : rules.familyMirrorsExpensed ? LOCKED_HELP.familyMirror
+                                : LOCKED_HELP.familyCost(tripType)}
+                            onClear={() => set({ familyCost: 0 })} />
                         <NumberField name="friendsDebit" label="Friends debit" adornment={currency}
                             value={expense.friendsDebit} onChange={handleChange}
-                            hint={AMOUNT_HELP.friendsDebit} onClear={() => set({ friendsDebit: 0 })} />
+                            disabled={!rules.friendsDebit}
+                            hint={rules.friendsDebit ? AMOUNT_HELP.friendsDebit : LOCKED_HELP.friendsDebit(tripType)}
+                            onClear={() => set({ friendsDebit: 0 })} />
                     </div>
                     <div className="callout">
                         <strong>Tip:</strong> for a typical purchase just fill <strong>Value</strong> and press <em>Copy to all</em> –
-                        then adjust only the fields that differ. If a friend covered the bill, enter the amount in
-                        <strong> Friends debit</strong> with a minus sign, e.g. <code>-120</code>.
+                        then adjust only the fields that differ.
+                        {rules.friendsDebit && <> If a friend covered the bill, enter the amount in
+                        <strong> Friends debit</strong> with a minus sign, e.g. <code>-120</code>.</>}
                     </div>
                 </section>
 
