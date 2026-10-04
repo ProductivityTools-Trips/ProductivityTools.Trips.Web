@@ -3,6 +3,9 @@ import { PieChart } from '@mui/x-charts/PieChart'
 import { fmtMoney } from '../../utils/format'
 
 /** Which PLN figure the breakdown is based on. */
+/** Fixed palette so a category keeps the same colour in the donut and the table. */
+const PALETTE = ['#2F6B4F', '#4C9A72', '#B8A531', '#D98B3C', '#A33A3A', '#5B7FB5', '#7E5AA6', '#3C9FA3', '#8C8C8C', '#C9607A']
+
 const METRICS = [
     { key: 'expensedInPln', label: 'Expensed PLN', column: 'Expensed PLN' },
     { key: 'valuePln', label: 'Value PLN', column: 'Value PLN' },
@@ -26,6 +29,7 @@ function BarChart({ expenses }) {
         return [...byCat.entries()]
             .map(([id, value]) => ({ id, label: id, value }))
             .sort((a, b) => b.value - a.value)
+            .map((d, i) => ({ ...d, color: PALETTE[i % PALETTE.length] }))
     }, [expenses, metricKey])
 
     const total = data.reduce((s, d) => s + d.value, 0)
@@ -63,7 +67,10 @@ function BarChart({ expenses }) {
                         <tbody>
                             {data.map(d => (
                                 <tr key={d.id}>
-                                    <td><span className="pill">{d.label}</span></td>
+                                    <td>
+                                        <span className="swatch" style={{ background: d.color }} />
+                                        <span className="pill">{d.label}</span>
+                                    </td>
                                     <td className="tbl__num">{fmtMoney(d.value)}</td>
                                     <td className="tbl__num tbl__muted">{total ? Math.round(d.value / total * 100) : 0}%</td>
                                 </tr>
@@ -84,13 +91,23 @@ function BarChart({ expenses }) {
                     </table>
                 </div>
 
-                <div className="card card--pad" style={{ display: 'flex', justifyContent: 'center' }}>
+                <div className="card card--pad chart-card">
                     <PieChart
                         series={[{ data, innerRadius: 50, paddingAngle: 1, cornerRadius: 3 }]}
-                        width={320}
+                        width={260}
                         height={240}
+                        margin={{ top: 10, bottom: 10, left: 10, right: 10 }}
                         slotProps={{ legend: { hidden: true } }}
                     />
+                    <ul className="legend">
+                        {data.map(d => (
+                            <li key={d.id} className="legend__item">
+                                <span className="swatch" style={{ background: d.color }} />
+                                <span className="legend__label">{d.label}</span>
+                                <span className="legend__value">{total ? Math.round(d.value / total * 100) : 0}%</span>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </div>
