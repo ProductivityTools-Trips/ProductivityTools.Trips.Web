@@ -81,11 +81,11 @@ function ExpenseList() {
                                     <td className="tbl__nowrap">{fmtDate(x.date)}</td>
                                     <td><span className="pill">{x.categoryName}</span></td>
                                     <td className="tbl__num">
-                                        {fmtMoney(x.value, 2)} <span className="tbl__muted">{x.currencyName}</span>
+                                        {fmtMoney(x.value)} <span className="tbl__muted">{x.currencyName}</span>
                                     </td>
-                                    <td className="tbl__num">{fmtMoney(x.expensed, 2)}</td>
-                                    <td className="tbl__num">{fmtMoney(x.familyCost, 2)}</td>
-                                    <td className="tbl__num hide-sm">{fmtMoney(x.friendsDebit, 2)}</td>
+                                    <td className="tbl__num">{fmtMoney(x.expensed)}</td>
+                                    <td className="tbl__num">{fmtMoney(x.familyCost)}</td>
+                                    <td className="tbl__num hide-sm">{fmtMoney(x.friendsDebit)}</td>
                                     <td className="tbl__num">{fmtMoney(x.valuePln)}</td>
                                     <td className="tbl__num">{fmtMoney(x.expensedInPln)}</td>
                                     <td className="tbl__num hide-sm">{fmtMoney(x.familyCostInPln)}</td>
@@ -110,9 +110,9 @@ function ExpenseList() {
                             <tfoot>
                                 <tr>
                                     <td colSpan={4}>Total</td>
-                                    <td className="tbl__num">{fmtMoney(totals.expensed, 2)}</td>
-                                    <td className="tbl__num">{fmtMoney(totals.familyCost, 2)}</td>
-                                    <td className="tbl__num hide-sm">{fmtMoney(totals.friendsDebit, 2)}</td>
+                                    <td className="tbl__num">{fmtMoney(totals.expensed)}</td>
+                                    <td className="tbl__num">{fmtMoney(totals.familyCost)}</td>
+                                    <td className="tbl__num hide-sm">{fmtMoney(totals.friendsDebit)}</td>
                                     <td className="tbl__num">{fmtMoney(totals.valuePln)}</td>
                                     <td className="tbl__num">{fmtMoney(totals.expensedInPln)}</td>
                                     <td className="tbl__num hide-sm">{fmtMoney(totals.familyCostInPln)}</td>

@@ -10,8 +10,8 @@ export const barColor = (t) => {
     return `hsl(${hue}, 70%, ${light}%)`
 }
 
-export const fmtMoney = (v, digits = 0) =>
-    v == null ? '—' : v.toLocaleString('pl-PL', { maximumFractionDigits: digits })
+export const fmtMoney = (v, digits = 2) =>
+    v == null ? '—' : v.toLocaleString('pl-PL', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
 const DATE_FMT = 'YYYY.MM.DD'
 
