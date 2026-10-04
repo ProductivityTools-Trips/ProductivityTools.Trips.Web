@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import service from '../../services/apiService'
 import { SortHeader, useSort } from '../Shared/Table'
 import { EXPENSED_SCALE, barColor, fmtMoney, fmtDate, sortBy } from '../../utils/format'
+import { TRIP_CATEGORIES } from '../../utils/tripTypes'
 
 const COLUMNS = [
     { key: 'name', label: 'Name' },
@@ -25,20 +26,25 @@ function TripList() {
     const navigate = useNavigate()
     const [trips, setTrips] = useState(null)
     const [query, setQuery] = useState('')
+    const [category, setCategory] = useState('all')   // 'all' | 'none' | <category>
     const [sort, toggleSort] = useSort('start', 'desc', ['name', 'tripCategory'])
 
     useEffect(() => {
         service.getTripsFullView().then(setTrips)
     }, [])
 
-    const visible = useMemo(() => {
+    // Search + category filter (shared by the table and the summary).
+    const filtered = useMemo(() => {
         if (!trips) return null
         const q = query.trim().toLowerCase()
-        const filtered = q ? trips.filter(t => t.name?.toLowerCase().includes(q)) : trips
-        return sortBy(filtered, sort.key, sort.dir)
-    }, [trips, query, sort])
+        return trips.filter(t =>
+            (!q || t.name?.toLowerCase().includes(q)) &&
+            (category === 'all' || (category === 'none' ? !t.tripCategory : t.tripCategory === category)))
+    }, [trips, query, category])
 
-    // Summary split into Private (Family + Friends) and Company trips.
+    const visible = useMemo(() => filtered && sortBy(filtered, sort.key, sort.dir), [filtered, sort])
+
+    // Summary split into Private (Family + Friends) and Company trips – follows the active filter.
     const summary = useMemo(() => {
         const sum = (rows) => ({
             count: rows.length,
@@ -46,10 +52,19 @@ function TripList() {
             cost: rows.reduce((s, t) => s + (t.cost || 0), 0),
             expensed: rows.reduce((s, t) => s + (t.expensed || 0), 0),
         })
-        const all = trips ?? []
+        const all = filtered ?? []
         const company = all.filter(t => t.tripType === 'Company')
         const privateTrips = all.filter(t => t.tripType !== 'Company')
         return { all: sum(all), private: sum(privateTrips), company: sum(company) }
+    }, [filtered])
+
+    // Only offer categories that actually occur (plus "No category" when relevant).
+    const categoryOptions = useMemo(() => {
+        const used = new Set((trips ?? []).map(t => t.tripCategory).filter(Boolean))
+        const opts = [{ key: 'all', label: 'All' }]
+        TRIP_CATEGORIES.filter(c => used.has(c)).forEach(c => opts.push({ key: c, label: c }))
+        if ((trips ?? []).some(t => !t.tripCategory)) opts.push({ key: 'none', label: 'No category' })
+        return opts
     }, [trips])
 
 
@@ -74,6 +89,24 @@ function TripList() {
                     <Link className="btn btn--primary" to="addtrip/">＋ Add trip</Link>
                 </div>
             </header>
+
+            {categoryOptions.length > 2 && (
+                <div className="filterbar">
+                    <span className="filterbar__label">Category</span>
+                    <div className="choices">
+                        {categoryOptions.map(o => (
+                            <button key={o.key} type="button"
+                                className={`choice choice--sm ${category === o.key ? 'is-selected' : ''}`}
+                                onClick={() => setCategory(o.key)}>
+                                {o.label}
+                            </button>
+                        ))}
+                    </div>
+                    {category !== 'all' && (
+                        <button type="button" className="link-btn" onClick={() => setCategory('all')}>Clear filter</button>
+                    )}
+                </div>
+            )}
 
             <div className="card">
                 <table className="tbl">
