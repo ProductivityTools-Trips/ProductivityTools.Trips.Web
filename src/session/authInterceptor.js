@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { config } from '../config'
-import { getIdToken } from './firebase'
+import { auth, getIdToken } from './firebase'
 import { report } from './activity'
 
 /**
@@ -29,7 +29,10 @@ export function installAuthInterceptors() {
                 const path = err.config.url.replace(config.PATH_BASE, '')
                 report({ level: 'error', text: [status, err.message, path].filter(Boolean).join(' · ') })
             }
-            if (err?.response?.status === 401 && window.location.pathname !== '/Login') {
+            // Only bounce to /Login when there really is no session. A 401 while a
+            // user is signed in is an API-side problem – surface it in the status
+            // bar instead of reloading the page (which also loses the current URL).
+            if (err?.response?.status === 401 && !auth.currentUser && window.location.pathname !== '/Login') {
                 window.location.assign('/Login')
             }
             return Promise.reject(err)

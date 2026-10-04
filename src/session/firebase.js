@@ -1,9 +1,7 @@
 import { initializeApp } from "firebase/app";
 import {
     GoogleAuthProvider,
-    browserLocalPersistence,
     getAuth,
-    setPersistence,
     signInWithPopup,
     signOut,
 } from "firebase/auth";
@@ -20,9 +18,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Keep the session in IndexedDB/localStorage across tabs and browser restarts
-// until the user explicitly signs out. (This is Firebase's default, made explicit.)
-setPersistence(auth, browserLocalPersistence).catch(console.error);
+// Session persistence: Firebase's default (IndexedDB, shared across tabs,
+// survives browser restarts) is what we want. Do NOT call setPersistence()
+// here – switching persistence while a freshly opened tab is still restoring
+// the user races with that restore and yields a null user for the first
+// requests (-> 401 -> bounce to /Login).
 
 const googleProvider = new GoogleAuthProvider();
 

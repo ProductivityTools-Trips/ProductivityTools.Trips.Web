@@ -44,6 +44,17 @@ function TripList() {
 
     const visible = useMemo(() => filtered && sortBy(filtered, sort.key, sort.dir), [filtered, sort])
 
+    /** Row click: plain click navigates in place; middle / ctrl / cmd / shift click opens a new tab. */
+    const openTrip = (e, tripId) => {
+        const url = `/tripdetail/${tripId}`
+        if (e.button === 1 || e.ctrlKey || e.metaKey || e.shiftKey) {
+            e.preventDefault()
+            window.open(url, '_blank', 'noopener')
+        } else {
+            navigate(url)
+        }
+    }
+
     // Summary split into Private (Family + Friends) and Company trips – follows the active filter.
     const summary = useMemo(() => {
         const sum = (rows) => ({
@@ -119,7 +130,9 @@ function TripList() {
                         {visible?.map(x => {
                             const ratio = Math.min(100, Math.max(0, (x.expensed || 0) / EXPENSED_SCALE * 100))
                             return (
-                                <tr key={x.tripId} className="is-link" onClick={() => navigate(`tripdetail/${x.tripId}`)}>
+                                <tr key={x.tripId} className="is-link"
+                                    onClick={(e) => openTrip(e, x.tripId)}
+                                    onAuxClick={(e) => e.button === 1 && openTrip(e, x.tripId)}>
                                     <td className="tbl__strong">
                                         <Link to={`tripdetail/${x.tripId}`} onClick={e => e.stopPropagation()}>{x.name}</Link>
                                         {x.tripType && <span className="pill" style={{ marginLeft: 8 }}>{x.tripType}</span>}
