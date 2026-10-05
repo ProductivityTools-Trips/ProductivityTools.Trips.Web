@@ -20,7 +20,7 @@ const COLUMNS = [
     { key: '_edit', label: '', sortable: false },
 ]
 
-const SUM_KEYS = ['expensed', 'familyCost', 'friendsDebit', 'valuePln', 'expensedInPln', 'familyCostInPln']
+const SUM_KEYS = ['familyCost', 'friendsDebit', 'valuePln', 'expensedInPln', 'familyCostInPln']
 
 function ExpenseList() {
     const { id } = useParams()
@@ -87,7 +87,9 @@ function ExpenseList() {
                                     <td className="tbl__num">
                                         {fmtMoney(x.value)} <span className="tbl__muted">{x.currencyName}</span>
                                     </td>
-                                    <td className="tbl__num">{fmtMoney(x.expensed)}</td>
+                                    <td className="tbl__num">
+                                        {fmtMoney(x.expensed)} <span className="tbl__muted">{x.currencyName}</span>
+                                    </td>
                                     <td className="tbl__num">{fmtMoney(x.familyCost)}</td>
                                     <td className="tbl__num hide-sm">{fmtMoney(x.friendsDebit)}</td>
                                     <td className="tbl__num">{fmtMoney(x.valuePln)}</td>
@@ -114,7 +116,7 @@ function ExpenseList() {
                             <tfoot>
                                 <tr>
                                     <td colSpan={4}>{allChecked ? "Total" : `Total (${selectedCount} selected)`}</td>
-                                    <td className="tbl__num">{fmtMoney(totals.expensed)}</td>
+                                    <td className="tbl__num tbl__muted" title="Mixed currencies – see Expensed PLN">–</td>
                                     <td className="tbl__num">{fmtMoney(totals.familyCost)}</td>
                                     <td className="tbl__num hide-sm">{fmtMoney(totals.friendsDebit)}</td>
                                     <td className="tbl__num">{fmtMoney(totals.valuePln)}</td>

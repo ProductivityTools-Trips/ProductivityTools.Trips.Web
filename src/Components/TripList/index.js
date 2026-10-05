@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import service from '../../services/apiService'
 import { SortHeader, useSort } from '../Shared/Table'
 import { EXPENSED_SCALE, barColor, fmtMoney, fmtDate, sortBy } from '../../utils/format'
-import { TRIP_CATEGORIES } from '../../utils/tripTypes'
+import { DEFAULT_TRIP_TYPE, TRIP_CATEGORIES, TRIP_TYPES } from '../../utils/tripTypes'
 
 const COLUMNS = [
     { key: 'name', label: 'Name' },
@@ -26,6 +26,7 @@ function TripList() {
     const navigate = useNavigate()
     const [trips, setTrips] = useState(null)
     const [query, setQuery] = useState('')
+    const [type, setType] = useState('all')           // 'all' | <trip type>
     const [category, setCategory] = useState('all')   // 'all' | 'none' | <category>
     const [sort, toggleSort] = useSort('start', 'desc', ['name', 'tripCategory'])
 
@@ -33,14 +34,15 @@ function TripList() {
         service.getTripsFullView().then(setTrips)
     }, [])
 
-    // Search + category filter (shared by the table and the summary).
+    // Search + type + category filter (shared by the table and the summary).
     const filtered = useMemo(() => {
         if (!trips) return null
         const q = query.trim().toLowerCase()
         return trips.filter(t =>
             (!q || t.name?.toLowerCase().includes(q)) &&
+            (type === 'all' || (t.tripType ?? DEFAULT_TRIP_TYPE) === type) &&
             (category === 'all' || (category === 'none' ? !t.tripCategory : t.tripCategory === category)))
-    }, [trips, query, category])
+    }, [trips, query, type, category])
 
     const visible = useMemo(() => filtered && sortBy(filtered, sort.key, sort.dir), [filtered, sort])
 
@@ -69,14 +71,11 @@ function TripList() {
         return { all: sum(all), private: sum(privateTrips), company: sum(company) }
     }, [filtered])
 
-    // Only offer categories that actually occur (plus "No category" when relevant).
-    const categoryOptions = useMemo(() => {
-        const used = new Set((trips ?? []).map(t => t.tripCategory).filter(Boolean))
-        const opts = [{ key: 'all', label: 'All' }]
-        TRIP_CATEGORIES.filter(c => used.has(c)).forEach(c => opts.push({ key: c, label: c }))
-        if ((trips ?? []).some(t => !t.tripCategory)) opts.push({ key: 'none', label: 'No category' })
-        return opts
-    }, [trips])
+    const categoryOptions = useMemo(() => [
+        { key: 'all', label: 'All' },
+        ...TRIP_CATEGORIES.map(c => ({ key: c, label: c })),
+        { key: 'none', label: 'No category' },
+    ], [])
 
 
     return (
@@ -102,8 +101,20 @@ function TripList() {
                 </div>
             </header>
 
-            {categoryOptions.length > 2 && (
-                <div className="filterbar">
+            <div className="filterbar filterbar--stack">
+                <div className="filterbar__row">
+                    <span className="filterbar__label">Type</span>
+                    <div className="choices">
+                        {[{ key: 'all', label: 'All' }, ...TRIP_TYPES.map(t => ({ key: t, label: t }))].map(o => (
+                            <button key={o.key} type="button"
+                                className={`choice choice--sm ${type === o.key ? 'is-selected' : ''}`}
+                                onClick={() => setType(o.key)}>
+                                {o.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <div className="filterbar__row">
                     <span className="filterbar__label">Category</span>
                     <div className="choices">
                         {categoryOptions.map(o => (
@@ -114,11 +125,11 @@ function TripList() {
                             </button>
                         ))}
                     </div>
-                    {category !== 'all' && (
-                        <button type="button" className="link-btn" onClick={() => setCategory('all')}>Clear filter</button>
-                    )}
                 </div>
-            )}
+                {(type !== 'all' || category !== 'all') && (
+                    <button type="button" className="link-btn" onClick={() => { setType('all'); setCategory('all') }}>Clear filters</button>
+                )}
+            </div>
 
             <div className="card">
                 <table className="tbl">

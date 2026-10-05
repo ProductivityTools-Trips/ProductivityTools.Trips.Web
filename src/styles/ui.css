@@ -458,3 +458,8 @@
   text-transform: uppercase;
   color: var(--muted);
 }
+
+/* stacked filter rows (type + category) */
+.filterbar--stack { align-items: flex-start; flex-direction: column; gap: 8px; }
+.filterbar__row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.filterbar__row .filterbar__label { min-width: 64px; }
