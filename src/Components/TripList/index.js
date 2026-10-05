@@ -3,7 +3,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import service from '../../services/apiService'
 import { SortHeader, useSort } from '../Shared/Table'
 import { EXPENSED_SCALE, barColor, fmtMoney, fmtDate, sortBy } from '../../utils/format'
-import { DEFAULT_TRIP_TYPE, TRIP_CATEGORIES, TRIP_TYPES } from '../../utils/tripTypes'
+import { TRIP_CATEGORIES } from '../../utils/tripTypes'
+
+/** Type filter: Family + Friends are shown together as private trips. */
+const TYPE_OPTIONS = [
+    { key: 'all', label: 'All', test: () => true },
+    { key: 'private', label: 'Family and Friends', test: t => t.tripType !== 'Company' },
+    { key: 'company', label: 'Company', test: t => t.tripType === 'Company' },
+]
 
 const COLUMNS = [
     { key: 'name', label: 'Name' },
@@ -26,7 +33,7 @@ function TripList() {
     const navigate = useNavigate()
     const [trips, setTrips] = useState(null)
     const [query, setQuery] = useState('')
-    const [type, setType] = useState('all')           // 'all' | <trip type>
+    const [type, setType] = useState('all')           // key of TYPE_OPTIONS
     const [category, setCategory] = useState('all')   // 'all' | 'none' | <category>
     const [sort, toggleSort] = useSort('start', 'desc', ['name', 'tripCategory'])
 
@@ -40,7 +47,7 @@ function TripList() {
         const q = query.trim().toLowerCase()
         return trips.filter(t =>
             (!q || t.name?.toLowerCase().includes(q)) &&
-            (type === 'all' || (t.tripType ?? DEFAULT_TRIP_TYPE) === type) &&
+            TYPE_OPTIONS.find(o => o.key === type).test(t) &&
             (category === 'all' || (category === 'none' ? !t.tripCategory : t.tripCategory === category)))
     }, [trips, query, type, category])
 
@@ -105,7 +112,7 @@ function TripList() {
                 <div className="filterbar__row">
                     <span className="filterbar__label">Type</span>
                     <div className="choices">
-                        {[{ key: 'all', label: 'All' }, ...TRIP_TYPES.map(t => ({ key: t, label: t }))].map(o => (
+                        {TYPE_OPTIONS.map(o => (
                             <button key={o.key} type="button"
                                 className={`choice choice--sm ${type === o.key ? 'is-selected' : ''}`}
                                 onClick={() => setType(o.key)}>
